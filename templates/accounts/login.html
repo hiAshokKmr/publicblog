@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'accounts/css/login.css' %}" />
+    <script
+      src="https://kit.fontawesome.com/9cc5263da9.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Login Page</title>
+  </head>
+
+  <body>
+    <div class="message-container">
+      <div id="successMessage" class="success-message">login succes</div>
+      <div id="errorMessage" class="error-message" style="display: none"></div>
+    </div>
+
+    <div class="container">
+      <h2 class="form-title">Login</h2>
+      <div class="content_box">
+        <!-- Login Form -->
+        <div class="content active">
+          <div class="form-box">
+            <form id="loginForm" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="input-group">
+                <div class="input-field">
+                  <i class="fa-solid fa-envelope"></i>
+                  <input type="email" placeholder="Email" id="email" />
+                </div>
+                <div class="input-field">
+                  <i class="fa-solid fa-lock"></i>
+                  <input type="password" placeholder="Password" id="password" />
+                  <i class="fa-solid fa-eye-slash" id="toggleLoginPassword"></i>
+                </div>
+              </div>
+              <div class="btn-field">
+                <button type="submit" id="loginBtn">Login</button>
+              </div>
+            </form>
+            <p class="switch-link">
+              Don't have an account?
+              <a href='{% url "account_app:register" %}'
+                >Create a new account</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://kit.fontawesome.com/9cc5263da9.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{% static 'accounts/js/login.js' %}"></script>
+  </body>
+</html>

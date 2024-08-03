@@ -1,0 +1,318 @@
+
+ {% load static  %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <title> {% block fortitle %}{% endblock fortitle %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'posts/css/base.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+
+
+    {% block forstyle %}
+    {%endblock forstyle %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="page-wrapper">
+
+
+        <!-- HEADER -->
+        <nav>
+
+            <!-- mobile -->
+            <ul id="mobile-sidebar" class="mobile-sidebar">
+                <li onclick="hideSideBar()"><a href="#"><i class="fas fa-times"></i>close </a></li>
+                <!-- sidebar user profile -->
+                <div class="userprofile-container">
+                    <img class="sidebar-profile-image" src="{% static "posts/images/default_profile.png" %}" alt="">
+                    <h4>username</h4>
+                </div>
+                <!-- sidebar user profile END-->
+
+                <!-- lanuage START-->
+                <div class="sidebar-menu">
+                    <div class="sidebar-menu-item" id="mobile-selected-language"><a ><i class="fas fa-language"></i><span >Tamil</span>
+
+                        <!-- language drop down arrow -->
+                        <i class="fas fa-chevron-down mobile-dropdown"></i>
+                    </a>
+                    <!-- language drop down -->
+                    <div class="sidebar-submenu"  id="sidebar-submenu-language">
+                        {% if languages %}
+                        {% for language in languages %}
+                        <a href="" class="sidebar-submenu-item"><i class="fa-solid fa-angle-right"></i>{{language.name}}</a>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <!-- language drop down END-->
+                </div>
+                <!-- lanuage  END -->
+
+
+                <!-- category START -->
+                    <div class="sidebar-menu-item" id="mobile-selected-category"><a ><i class="fas fa-list"></i><span>Home</span>
+                        <!-- category drop down arrow -->
+                        <i class="fas fa-chevron-down mobile-dropdown"></i>
+                        </a>
+                        <!-- category drop down -->
+                        <div class="sidebar-submenu" id="sidebar-submenu-category">
+                            {% if categories  %}
+                            {% for category in categories%}
+                            <a href="" class="sidebar-submenu-item"><i class="fa-solid fa-angle-right"></i>{{category.name}}</a>
+                            {% endfor %}
+                            {% endif %}
+
+                        </div>
+                        <!-- category drop down END-->
+                    </div>
+                    <!-- category  END -->
+                    <div class="sidebar-menu-item"><a href="{% url 'blogpost:post-create' %}"><i class="fas fa-rectangle-list"></i>Write Post</a></div>
+                    {% if request.user.is_authenticated %}
+                    <div class="sidebar-menu-item"><a href=""><i class="fas fa-rectangle-list"></i>Dashboard</a></div>
+                    {% endif %}
+                    <div class="sidebar-menu-item"><a href=""><i class="fas fa-circle-info"></i>About</a></div>
+                    {% if request.user.is_authenticated %}
+                    <div class="sidebar-menu-item"><a href=""><i class="fas fa-sign-in-alt"></i>Logout</a></div>
+                    {% endif %}
+                
+                </div>
+            </ul>
+                <!-- mobile END -->
+
+
+                <!-- desktop START -->
+            <ul>
+                <li><img src="{% static 'posts/images/website_logo.png' %}" alt="Logo" height="100%" width="180px"></li>
+                <li class="hideOnMobile desktop-dropdown">
+                    {% if languages %}
+                    <a id="desktop-language" href="#" onclick="toggleDropdown(event, 'language-dropdown')">Language<i class="fas fa-chevron-down"></i></a>
+                    <div id="language-dropdown" class="desktop-dropdown-content">
+                        {% for language in languages %}
+                        <a href="#" onclick="setLanguage('{{language.name}}')">{{language.name}}</a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </li>
+                <li class="hideOnMobile desktop-dropdown">
+                    {% if categories %}
+                    <a id="desktop-category" href="#" onclick="toggleDropdown(event, 'category-dropdown')">Home <i class="fas fa-chevron-down"></i></a>
+                    <div id="category-dropdown" class="desktop-dropdown-content">
+                        <a href="#" onclick="setCategory('Home')">Home</a>
+                        {% for category in categories%}
+                        <a href="#" onclick="setCategory('{{category.name}}')">{{category.name}}</a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </li>
+
+                {% if request.user.is_authenticated %}
+                <li class="hideOnMobile"><a href="#" class="" ><i class="fas fa-rectangle-list"></i>Dashboard</a></li>
+                {% endif %}
+                <li class="hideOnMobile"><a href="#"><i class="fas fa-circle-info"></i>About</a></li>
+                {% if request.user.is_authenticated %}
+                <li class="hideOnMobile"><a href="#"><i class="fas fa-sign-in-alt "></i>Logout</a></li>
+                {% endif %}
+                <li class="menu-button" onclick="showSideBar()"><a href="#"><i class="fas fa-bars"></i></a></li>
+            </ul>
+            <!-- desktop END -->
+        </nav>
+        <!-- HEADER END -->
+        
+
+
+    <div class="content-container">
+
+        
+
+        <!-- Main content goes here -->
+{% block forcontent %}
+
+
+        
+
+
+ {% endblock forcontent %} 
+
+
+            
+    </div>
+
+    <!-- Content Container End -->
+     
+
+    <!-- Create post Floating Action Button -->
+    <div class="create-post-container">
+        <a href="{% url 'blogpost:post-create' %}" class="create-post-link">
+        <button class="create-post-button">
+            <span class="create-post-text">Create Post</span>
+            <i class="fa-solid fa-pen-to-square create-post-icon"></i>
+        </button>
+    </div>
+    <!-- Create post Floating Action Button end -->
+
+                    <!-- FOOTER START -->
+            <footer>
+                <div class="footer-container">
+                    <div class="footer-row">
+                            <div class="footer-col">
+                                <h4>about us</h4>
+                                <ul>
+                                    <li><a href="#">Our Service</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                    <li><a href="#">Cookie Preferences</a></li>
+                                    <li><a href="#">Terms of Service</a></li>
+                                </ul>
+                            </div>
+                            <div class="footer-col">
+                                <h4>follow us</h4>
+                                <div class="social-links">
+                                    <a href="#"><i class="fa-brands fa-square-facebook"  style="color: darkblue;"></i></a>
+                                    <a href="#"><i class="fa-brands fa-square-instagram" style="color: coral;"></i></a>
+                                    <a href="#"><i class="fa-brands fa-square-x-twitter" style="color: #131313;"></i></a>
+                                    <a href="#"><i class="fa-brands fa-linkedin" style="color: rgb(3, 114, 241);"></i></a>
+                                </div>
+                            </div>
+                            <div class="footer-col">
+                                <h4>contact us</h4>
+                                <ul>
+                                    <li><a href="#">Support Email</a></li>
+                                    <li><a href="#">General Email</a></li>
+                                    <li><a href="#">WhatsApp</a></li>
+                                </ul>
+                            </div>
+                            <div class="footer-col">
+                                <button class="back-to-top">Scroll Back<i class="fa-solid fa-angles-up" style="color:black;"></i></button>
+                            </div>
+                    </div>
+                </div> 
+            </footer>
+                <!-- FOOTER END -->
+    </div>
+    <!-- Page Wrapper END -->
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- script area -->
+<script src="{% static 'posts/js/base.js' %}"></script>
+
+
+
+{% block forscript %}
+{% endblock forscript%}
+
+
+<script>
+
+
+
+    function getCsrfToken() {
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        console.log("CSRF token is:", token);
+        return token;
+    }
+
+
+    function getUrl() {
+        var url="{% url 'blogpost:post-home' %}";
+        console.log("url  is:", url);
+        return url;
+    }
+
+
+
+
+    // // Select Language Code Mobile
+    // // Get the initial selected language from the mobile-selected-language element
+    // let mobileSelectedLanguage = document.querySelector("#mobile-selected-language span").textContent;
+    
+    // document.getElementById("mobile-selected-language").addEventListener("click", function() {
+    //     var submenu = document.getElementById("sidebar-submenu-language");
+    //     if (submenu.classList.contains("show")) {
+    //         submenu.classList.remove("show");
+    //     } else {
+    //         submenu.classList.add("show");
+    //     }
+    // });
+    
+    // var submenuItems = document.querySelectorAll(".sidebar-submenu-item");
+    // submenuItems.forEach(function(item) {
+    //     item.addEventListener("click", function(event) {
+    //         event.preventDefault(); 
+    //         mobileSelectedLanguage = this.textContent; 
+    //         var mobileSelectedLanguageSpan = document.querySelector("#mobile-selected-language span");
+    //         mobileSelectedLanguageSpan.textContent = mobileSelectedLanguage;
+    //         var submenu = document.getElementById("sidebar-submenu-language");
+    //         setTimeout(function() {
+    //             submenu.classList.remove("show");
+    //         }, 100); 
+    //         sendMobileSelectedLanguage();
+    //     });
+    // });
+    
+    // // Example fetch method to send the selected language
+    // function sendMobileSelectedLanguage() {
+    //     console.log("mobile selected language is ", mobileSelectedLanguage);
+    //     fetch('https://httpbin.org/post', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ language: mobileSelectedLanguage }),
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log('Success:', data);
+    //     })
+    //     .catch((error) => {
+    //         console.error('Error:', error);
+    //     });
+    // }
+    // // Select Language Code Mobile END
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    </script>
+    
+
+
+</body>
+</html>

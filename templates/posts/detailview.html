@@ -1,0 +1,134 @@
+{% extends "posts/base.html" %}
+{% load static %}
+
+
+{% block forcontent %}
+
+    <!-- Post Detail Wrapper Start -->
+    <div class="post-detail-wrapper">
+        
+        <div class="post-detail-container">
+            <div class="post-detail-main-content">
+                <div class="post-detail-title">{{post.title}}</div>
+                <div class="post-detail-header">
+                    {% if post.author.profile_picture %}
+                        <img src="{{ post.author.profile_picture.url }}" alt="Author" class="post-detail-author-image">
+                    {% else %}
+                        <img src="{% static 'posts/images/default_profile.png' %}" alt="Author" class="post-detail-author-image">
+                    {% endif %}
+
+                    <div class="post-detail-author">{{ post.author.username|default:"Anonymous" }}</div>
+                    <div class="post-detail-share-icons">
+                        <img src="{% static 'posts/images/facebook.png' %}" alt="Facebook">
+                        <img src="{% static 'posts/images/whatsapp.png' %}"alt="WhatsApp">
+                        <img src="{% static 'posts/images/twitter.png' %}" alt="Twitter">
+                    </div>
+                </div>
+                <div class="post-detail-content">
+                   {{post.content|safe}}
+                </div>
+                <div class="post-detail-comments-section">
+                    <div class="post-detail-title">Total comments : </div> 
+                    <div class="post-detail-comment">
+                        <div>
+                            <p>Name: [pending]</p>
+                            <p class="post-detail-user-comment">Comment goes here...</p>
+                        </div>
+                        <p >Date</p>
+                    </div>
+                    <div class="post-detail-comment">
+                        <div>
+                            <p >Name: [pending]</p>
+                            <p class="post-detail-user-comment">
+                                "Avengers: Endgame" is the epic conclusion to the Marvel Cinematic Universe's Infinity Saga. Directed by Anthony and Joe Russo, this blockbuster brings together an ensemble cast, including Robert Downey Jr., Chris Evans, and Scarlett Johansson, to deliver a visually stunning and emotionally charged finale. The film explores the aftermath of "Avengers: Infinity War" and features impressive special effects, heartfelt moments, and a satisfying conclusion to long-running storylines. With its high-stakes action and character-driven narrative, "Endgame" has become a cultural phenomenon and a testament to superhero cinema. 
+                            </p>
+                        </div>
+                        <p class="post-detail-comment-name-date" >Date</p>
+                    </div>
+                    <div class="post-detail-comment">
+                        <div>
+                            <p >Name: [pending]</p>
+                            <p class="post-detail-user-comment">heartfelt moments, and a satisfying conclusion to long-running storylines. With its high-stakes action and character-driven narrative, "Endgame" has become a cultural phenomenon and a testament to superhero cinema.</p>
+                        </div>
+                        <p >Date</p>
+                    </div>
+
+                    <div class="post-detail-add-comment">
+                        <textarea placeholder="Add your comment"></textarea>
+                    </div>
+                    <div class="post-detail-add-comment">
+                        <button>Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- Post Detail Wrapper End -->
+
+
+        <!-- Popular Posts Start -->
+        <div class="popular-post-container">
+
+ 
+
+                    {% if random_posts %}
+                    {% for post in random_posts %}
+                    <div class="popular-post" data-url="{{post.get_absolute_url}}">
+                    <img src="{{post.image_url}}" alt="Image">
+                    <div class="popular-post-content">
+                        <div class="popular-post-title">{{post.title}}</div>
+                        <div class="popular-post-date-and-icon popular-post-date">
+                            <time datetime="" >{{post.get_display_date|date:"d" }}{{post.get_display_date|date:"M Y" }}</time>
+                            <i class="fa-solid fa-arrow-up-right-from-square green-post-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %} 
+
+          
+
+
+
+        </div>
+<!-- Popular Posts End -->
+
+
+
+    <!-- Scrollable  Posts Start -->
+    <div class="scrollable-container-wrapper">
+
+                <div class="scroll-indicator scroll-indicator-left"><i class="fa fa-arrow-left"></i></div>
+                <div class="scrollable-container">
+                    
+                    {% if related_posts %}
+                     {% for post in related_posts%}
+                    <div class="scrollable-post" data-url="{{post.get_absolute_url}}">
+                        <div class="scrollable-post-content">
+                            <div class="scrollable-post-date">{{post.get_display_date|date:"d" }}{{post.get_display_date|date:"M Y" }}</div>
+                            <i class="fa-solid fa-arrow-up-right-from-square scrollable-post-icon"></i>
+                            <img src="{{post.image_url}}" alt="Image">
+                            <div class="scrollable-post-title">{{post.title}}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+
+
+
+                </div>
+                <div class="scroll-indicator scroll-indicator-right"><i class="fa fa-arrow-right"></i> </div>
+
+    </div>
+    <!-- Scrollable Post END -->
+
+{% endblock forcontent%}
+
+
+{% block forscript %}
+
+
+{% endblock forscript%}

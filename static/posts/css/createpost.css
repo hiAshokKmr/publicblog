@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&display=swap');
+
+/* Body and Container */
+body {
+    font-family: 'Inter', sans-serif;
+    cursor: pointer; 
+    background-color: rgb(243, 241, 241);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: rgb(243, 241, 241);
+    width: 80%;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+}
+
+/* Heading */
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Form Fields */
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    padding-left: 40px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Input Field Hover and Focus */
+.form-group input:hover,
+.form-group textarea:hover,
+.form-group select:hover {
+    border-color: #ccc;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: rgb(255, 158, 14);
+    box-shadow: 0 0 5px rgba(16, 158, 35, 0.5);
+}
+
+/* Error Messages */
+.form-group .error {
+    color: #e74c3c;
+    font-size: 0.875em;
+    font-weight: 400;
+    font-size: 14px;
+    margin-top: 5px;
+    background-color: #fce4e4;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+/* Dropdowns */
+.form-group select {
+    background-color: #fff;
+    color: #333;
+    font-size: 16px;
+}
+
+.form-group select:hover {
+    background-color: #f0f0f0;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: rgb(255, 158, 14);
+    box-shadow: 0 0 5px rgba(16, 158, 35, 0.5);
+
+}
+
+/* Dropdown Child Container */
+.form-group select option {
+    background-color: #fff;
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Submit Button */
+.btn-primary {
+    background-color: rgb(255, 158, 14);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0bc934;
+}
+
+
