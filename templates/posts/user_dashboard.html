@@ -1,0 +1,275 @@
+{% load static %}
+{}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      .dashboard-container {
+        padding: 10px;
+        max-width: 100%;
+        margin: 0 auto;
+        background-color: #f0f0f0;
+      }
+
+      /* User Profile Section */
+      .user-profile {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        background-color: #ccc;
+        margin-bottom: 20px;
+        border-radius: 10px;
+      }
+
+      .profile-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .profile-image img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 20px;
+      }
+
+      .profile-info p {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .profile-stats {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+      }
+
+      /* User Posts Section */
+      .user-posts {
+        background-color: #ccc;
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      .select-section {
+        text-align: right;
+        margin-bottom: 20px;
+      }
+
+      select {
+        padding: 5px;
+        font-size: 16px;
+      }
+
+      .posts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 10px;
+      }
+
+      .post-item {
+        position: relative;
+        background-color: #444;
+        border: 2px solid #333;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .post-image img {
+        width: 100%;
+        height: auto;
+      }
+
+      .post-title {
+        background-color: #4caf50;
+        padding: 10px;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+      }
+
+      .pending-label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      /* Responsive Design */
+      @media screen and (max-width: 600px) {
+        .profile-row {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .profile-info p {
+          text-align: center;
+        }
+
+        .profile-stats {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <!-- User Profile Section -->
+      <div class="user-profile">
+        <div class="profile-row">
+          <div class="profile-image">
+            <img src="profile.jpg" alt="Profile Image" />
+          </div>
+          <div class="profile-info">
+            <p>Username: User</p>
+            <p>Email Id: user@gmail.com</p>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <p>Published Post: 10</p>
+          <p>Pending Posts: 5</p>
+        </div>
+      </div>
+
+      <!-- User Posts Section -->
+      <div class="user-posts">
+        <div class="select-section">
+          <select id="post-select" onchange="filterPosts()">
+            <option value="all">Select</option>
+            <option value="pending">Pending Posts</option>
+            <option value="published">Published Posts</option>
+          </select>
+        </div>
+
+        <div class="posts-grid" id="posts-grid">
+          <!-- Published Posts -->
+
+          <div class="post-item published">
+            <div class="post-image">
+              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
+            </div>
+            <div class="post-title">
+              <p>Published Post 1</p>
+            </div>
+          </div>
+
+          <div class="post-item published">
+            <div class="post-image">
+              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
+            </div>
+            <div class="post-title">
+              <p>Published Post 1</p>
+            </div>
+          </div>
+
+          <div class="post-item published">
+            <div class="post-image">
+              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
+            </div>
+            <div class="post-title">
+              <p>Published Post 1</p>
+            </div>
+          </div>
+
+          <div class="post-item published">
+            <div class="post-image">
+              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
+            </div>
+            <div class="post-title">
+              <p>Published Post 1</p>
+            </div>
+          </div>
+
+          <div class="post-item published">
+            <div class="post-image">
+              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
+            </div>
+            <div class="post-title">
+              <p>Published Post 1</p>
+            </div>
+          </div>
+
+          <div class="post-item published">
+            <div class="post-image">
+              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
+            </div>
+            <div class="post-title">
+              <p>Published Post 2</p>
+            </div>
+          </div>
+
+          <!-- Pending Posts -->
+          <div class="post-item pending" style="display: none">
+            <div class="pending-label">Pending</div>
+            <div class="post-image">
+              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
+            </div>
+            <div class="post-title">
+              <p>Pending Post 1</p>
+            </div>
+          </div>
+
+          <div class="post-item pending" style="display: none">
+            <div class="pending-label">Pending</div>
+            <div class="post-image">
+              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
+            </div>
+            <div class="post-title">
+              <p>Pending Post 2</p>
+            </div>
+          </div>
+
+          <!-- Add more post items as needed -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function filterPosts() {
+        var select = document.getElementById("post-select");
+        var value = select.value;
+        var posts = document.querySelectorAll(".post-item");
+
+        posts.forEach(function (post) {
+          if (value === "all") {
+            post.style.display = "block";
+          } else if (value === "pending") {
+            post.style.display = post.classList.contains("pending")
+              ? "block"
+              : "none";
+          } else if (value === "published") {
+            post.style.display = post.classList.contains("published")
+              ? "block"
+              : "none";
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
