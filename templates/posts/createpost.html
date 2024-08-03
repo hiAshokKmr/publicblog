@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create a New Post</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'posts/css/createpost.css' %}" />
+</head>
+<body>
+    <div class="container">
+        <h2>Create a New Post</h2>
+        <form method="post" enctype="multipart/form-data">
+            {{ form.media }} {% csrf_token %}
+
+            <!-- Title Field -->
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                {{ form.title }} {% if form.title.errors %}
+                <div class="error">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Category Field -->
+            <div class="form-group">
+                <label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
+                {{ form.category }} {% if form.category.errors %}
+                <div class="error">{{ form.category.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Language Field -->
+            <div class="form-group">
+                <label for="{{ form.language.id_for_label }}">{{ form.language.label }}</label>
+                {{ form.language }} {% if form.language.errors %}
+                <div class="error">{{ form.language.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Content Field -->
+            <div class="form-group">
+                <label for="{{ form.content.id_for_label }}">{{ form.content.label }}</label>
+                {{ form.content }} {% if form.content.errors %}
+                <div class="error">{{ form.content.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Thumbnail Field -->
+            <div class="form-group">
+                <label for="{{ form.thumbnail.id_for_label }}">{{ form.thumbnail.label }}</label>
+                {{ form.thumbnail }} {% if form.thumbnail.errors %}
+                <div class="error">{{ form.thumbnail.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Name Field (Shown only for unauthenticated users) -->
+            {% if not user.is_authenticated %}
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                {{ form.name }} {% if form.name.errors %}
+                <div class="error">{{ form.name.errors }}</div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Email Field (Shown only for unauthenticated users) -->
+            {% if not user.is_authenticated %}
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                {{ form.email }} {% if form.email.errors %}
+                <div class="error">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-primary">Create</button>
+        </form>
+    </div>
+</body>
+</html>

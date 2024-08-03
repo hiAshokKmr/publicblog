@@ -1,0 +1,143 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="{% static 'accounts/css/register.css' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/9cc5263da9.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Create Account</title>
+    <style></style>
+  </head>
+  <body>
+    <!-- Messages block -->
+
+    <div class="server-message-container">
+      <div class="server-message-container-content">
+        <div class="server-success-message" id="serverSuccessMessage">
+          <span id="server-success-message-add"></span>
+        </div>
+        <div class="server-error-message" id="serverErrorMessage">
+          <span id="nameErrorMessage"></span>
+          <span id="emailErrorMessage"></span>
+          <span id="passwordErrorMessage"></span>
+          <span id="confirmpasswordMessage"></span>
+          <span id="profilepictureMessage"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+      <div class="content_box">
+        <!-- Register Form -->
+        <div class="content-active">
+          <div class="form-box">
+            <h2 class="form-title">Create Account</h2>
+            <form id="registerForm" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="input-group">
+                <div style="border-radius: 100%">
+                  <label for="profile">
+                    <img src={% static "accounts/images/edit.png" %} alt=""
+                    height="90" width="100" style="" id="uploadImg">
+                    <br />
+                    <p>Click to upload profile photo (optional)</p>
+                  </label>
+
+                  <input
+                    type="file"
+                    name="profile"
+                    id="profile"
+                    style="display: none"
+                  />
+                </div>
+
+                <span
+                  class="input-error-message"
+                  id="profilePictureError"
+                ></span>
+
+                <div class="input-field">
+                  <i class="fa-solid fa-user"></i>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    name="username"
+                    id="username"
+                  />
+                </div>
+                <span class="input-error-message" id="nameError"></span>
+
+                <div class="input-field">
+                  <i class="fa-solid fa-envelope"></i>
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    name="email"
+                    id="email"
+                  />
+                </div>
+                <span class="input-error-message" id="emailError"></span>
+
+                <div class="input-field">
+                  <i class="fa-solid fa-lock"></i>
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    name="password1"
+                    id="password1"
+                  />
+                  <i
+                    class="fa-solid fa-eye-slash"
+                    id="toggleRegisterPassword"
+                  ></i>
+                </div>
+                <span class="input-error-message" id="passwordError"></span>
+
+                <div class="input-field">
+                  <i class="fa-solid fa-lock"></i>
+                  <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    name="password2"
+                    id="password2"
+                  />
+                  <i
+                    class="fa-solid fa-eye-slash"
+                    id="toggleConfirmPassword"
+                  ></i>
+                </div>
+                <span
+                  class="input-error-message"
+                  id="confirmPasswordError"
+                ></span>
+              </div>
+
+              <div class="btn-field">
+                <button type="submit" id="registerBtn">Create Account</button>
+              </div>
+            </form>
+            <p class="switch-link">
+              Already have an account?
+              <a href="{% url 'account_app:login' %}">Go to login</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://kit.fontawesome.com/9cc5263da9.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'accounts/js/register.js' %}"></script>
+    <script>
+      const loginUrl = "{% url 'account_app:login' %}";
+    </script>
+  </body>
+</html>

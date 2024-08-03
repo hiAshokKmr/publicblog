@@ -1,0 +1,110 @@
+{% extends "posts/base.html" %}
+{% load static %}
+
+
+{% block fortitle %}Home{% endblock fortitle %}
+
+{% block forcontent %}
+
+
+
+            <!-- PostOne Posts Start -->
+            <div class="post-one-wrapper">
+
+
+                    {% for post in posts %}
+                  
+                    <div class="post-one" data-url="{{post.get_absolute_url}}">
+                        <div class="post-one-header" >
+                            <div class="post-one-date">{{post.get_display_date|date:"d" }}{{post.get_display_date|date:"M Y" }}</div>
+                            <img src="{{post.image_url}}" alt="post thumbnail" class="post-one-img">
+                        </div>
+                        <div class="post-one-content">
+                           <div class="post-one-title" data-url="{{post.get_absolute_url}}">{{post.title}}</div>
+                            <i class="fa-solid fa-arrow-up-right-from-square icon"></i>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+            
+            
+            
+                </div>
+            <!-- PostOne Posts End -->
+            
+            
+            
+            
+                    <!-- Popular Posts Start -->
+                    <div class="popular-post-container">
+            
+             
+            
+                        {% if popular_posts %}
+                        {% for popular in popular_posts %}
+                        <div class="popular-post" data-url="{{popular.get_absolute_url}}">
+                            <img src="{{popular.image_url}}" alt="Image">
+                            <div class="popular-post-content">
+                                <div class="popular-post-title">{{popular.title}}</div>
+                                <div class="popular-post-date-and-icon popular-post-date">
+                                    <time datetime="" >{{popular.get_display_date|date:"d" }}{{popular.get_display_date|date:"M Y" }}</time>
+                                    <i class="fa-solid fa-arrow-up-right-from-square green-post-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %} 
+                      
+
+
+
+            
+                                    
+
+                        
+            
+                                    
+            
+                    </div>
+            <!-- Popular Posts End -->
+            
+            
+            
+            <!-- Scrollable Posts Start -->
+            <div class="scrollable-container-wrapper">
+            
+                <div class="scroll-indicator scroll-indicator-left"><i class="fa fa-arrow-left"></i></div>
+                 <div class="scrollable-container">
+                  
+                    {% if more_popular_posts %}
+                    {% for morepopular in more_popular_posts %}
+                        <div class="scrollable-post" data-url="{{morepopular.get_absolute_url}}">
+                            <div class="scrollable-post-content">
+                                <div class="scrollable-post-date">{{morepopular.get_display_date|date:"d" }}{{morepopular.get_display_date|date:"M Y" }}</div>
+                                <i class="fa-solid fa-arrow-up-right-from-square scrollable-post-icon"></i>
+                                    <img src="{{morepopular.image_url}}" alt="image">
+                                <div class="scrollable-post-title"> {{morepopular.title}}</div>
+                            </div>
+                        </div>
+                        {%endfor%}
+                        {%endif%}
+            
+                </div>
+                <div class="scroll-indicator scroll-indicator-right"><i class="fa fa-arrow-right"></i> </div>
+                
+           </div>
+            <!-- Scrollable Post END -->
+            
+
+
+ {% endblock forcontent %}
+
+
+ {% block forscript %}
+ <script>
+
+
+    
+</script>
+{% endblock forscript %}
+
