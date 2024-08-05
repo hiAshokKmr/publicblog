@@ -1130,9 +1130,11 @@ button:focus {
     right: 20px;
     z-index: 1000;
 }
+
 .create-post-container a{
     text-decoration: none;
 }
+
 .create-post-button {
     display: flex;
     align-items: center;
