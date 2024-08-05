@@ -117,7 +117,7 @@
                     </div>
                     {% endif %}
                 </li>
-
+                <li class="hideOnMobile"><a href="{% url 'blogpost:post-create' %}" class="" ><i class="fa-solid fa-pen-to-square create-post-icon"></i>Write Post</a></li>
                 {% if request.user.is_authenticated %}
                 <li class="hideOnMobile"><a href="#" class="" ><i class="fas fa-rectangle-list"></i>Dashboard</a></li>
                 {% endif %}
@@ -161,6 +161,7 @@
             <i class="fa-solid fa-pen-to-square create-post-icon"></i>
         </button>
     </div>
+
     <!-- Create post Floating Action Button end -->
 
                     <!-- FOOTER START -->
