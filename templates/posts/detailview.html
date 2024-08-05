@@ -1,71 +1,145 @@
 {% extends "posts/base.html" %}
 {% load static %}
+{% load tz %}
 
+{% block formeta %}
+<meta property="og:description" content="{{share_post_description}}" />
+<meta property="og:title" content="{{share_post_title}}" />
+<meta property="og:image" content="{{ share_post_thumbnail}}" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="{{share_post_url}}" />
+ {% endblock formeta%}
+
+ 
+ {% block forstyle %}
+
+ {%endblock forstyle %}
 
 {% block forcontent %}
 
     <!-- Post Detail Wrapper Start -->
-    <div class="post-detail-wrapper">
+    <div class="post-detail-wrapper" >
         
-        <div class="post-detail-container">
+        <p>{{share_post_description}}</p>
+        <p>{{share_post_title}}</p>
+        <p>{{share_post_url}}</p>
+
             <div class="post-detail-main-content">
+
                 <div class="post-detail-title">{{post.title}}</div>
                 <div class="post-detail-header">
                     {% if post.author.profile_picture %}
-                        <img src="{{ post.author.profile_picture.url }}" alt="Author" class="post-detail-author-image">
+                        <img  class="remove-transition"   src="{{ post.author.profile_picture.url }}" alt="Author" class="post-detail-author-image">
                     {% else %}
                         <img src="{% static 'posts/images/default_profile.png' %}" alt="Author" class="post-detail-author-image">
                     {% endif %}
 
                     <div class="post-detail-author">{{ post.author.username|default:"Anonymous" }}</div>
                     <div class="post-detail-share-icons">
-                        <img src="{% static 'posts/images/facebook.png' %}" alt="Facebook">
-                        <img src="{% static 'posts/images/whatsapp.png' %}"alt="WhatsApp">
-                        <img src="{% static 'posts/images/twitter.png' %}" alt="Twitter">
+
+                        <a href="https://api.whatsapp.com/send?text=Check%20this%20out!%0A%0A{{ share_post_title }}%0A%0A{{ share_post_description }}%0A%0A{{ share_post_thumbnail }}%0A%0A{{ share_post_url }}" target="_blank">
+                            <img src="{% static 'posts/images/whatsapp.png' %}" alt="WhatsApp">
+                        </a>
+
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_post_url }}" target="_blank">
+                            <img src="{% static 'posts/images/facebook.png' %}" alt="Facebook">
+                        </a>
+
+                        <a href="https://twitter.com/intent/tweet?text={{ share_post_title }}%0A%0A{{ share_post_description }}%0A%0A{{ share_post_url }}" target="_blank">
+                            <img src="{% static 'posts/images/twitter.png' %}" alt="Twitter">
+                        </a>
+
                     </div>
                 </div>
                 <div class="post-detail-content">
-                   {{post.content|safe}}
+
+
+
+                    <img class="remove-transition"  src="{{share_post_thumbnail}}" alt="thumbnail" width="100%" height="400px">
+                    
+
+                    {{post.content|safe}}
+                
                 </div>
-                <div class="post-detail-comments-section">
-                    <div class="post-detail-title">Total comments : </div> 
-                    <div class="post-detail-comment">
-                        <div>
-                            <p>Name: [pending]</p>
-                            <p class="post-detail-user-comment">Comment goes here...</p>
+
+            </div>
+
+
+            <div class="post-detail-comment-section" data-authenticated="{{check_user}}">
+
+                <div class="comments-container">
+
+                    
+
+                    <div class="comment-vote-container">
+                        <div class="comment-vote-item">
+                            <img src="{% static 'posts/images/comment.png' %}" > <!-- Comment icon -->
+                            <span>{{ post.comments_count }} Comments</span>
                         </div>
-                        <p >Date</p>
-                    </div>
-                    <div class="post-detail-comment">
-                        <div>
-                            <p >Name: [pending]</p>
-                            <p class="post-detail-user-comment">
-                                "Avengers: Endgame" is the epic conclusion to the Marvel Cinematic Universe's Infinity Saga. Directed by Anthony and Joe Russo, this blockbuster brings together an ensemble cast, including Robert Downey Jr., Chris Evans, and Scarlett Johansson, to deliver a visually stunning and emotionally charged finale. The film explores the aftermath of "Avengers: Infinity War" and features impressive special effects, heartfelt moments, and a satisfying conclusion to long-running storylines. With its high-stakes action and character-driven narrative, "Endgame" has become a cultural phenomenon and a testament to superhero cinema. 
-                            </p>
+                        <div class="comment-vote-item">
+                            <img src="{% static 'posts/images/vote_black.png' %}" >
+                            <span>{{ post.likes_count }} Votes</span>
                         </div>
-                        <p class="post-detail-comment-name-date" >Date</p>
-                    </div>
-                    <div class="post-detail-comment">
-                        <div>
-                            <p >Name: [pending]</p>
-                            <p class="post-detail-user-comment">heartfelt moments, and a satisfying conclusion to long-running storylines. With its high-stakes action and character-driven narrative, "Endgame" has become a cultural phenomenon and a testament to superhero cinema.</p>
-                        </div>
-                        <p >Date</p>
                     </div>
 
-                    <div class="post-detail-add-comment">
-                        <textarea placeholder="Add your comment"></textarea>
+                    {% for comment in post.postcomments_set.all %}
+
+                    <div class="comment">
+                        {% if comment.user %}
+                        <span>
+                            {{ comment.user.username }} :
+                            {% if not comment.published %}
+                                <span class="bending-text">[bending]</span>
+                            {% endif %}
+                        </span>
+                    {% elif comment.name %}
+                        <span>
+                            {{ comment.name }} :
+                            {% if not comment.published %}
+                                <span class="bending-text">[bending]</span>
+                            {% endif %}
+                        </span>
+                    {% else %}
+                        <span>
+                            public user :
+                            {% if not comment.published %}
+                                <span class="bending-text">[bending]</span>
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                        
+                        <span class="comment-date">{{comment.created|date:"d"}}{{comment.created|date:"M Y"}}</span>
+                        {% if comment.published %}
+                        <p>{{comment.text}}</p>
+                        {%else%}
+                        <p>waiting for approval</p>
+                        {%endif%}
                     </div>
-                    <div class="post-detail-add-comment">
-                        <button>Submit</button>
-                    </div>
+                    {% empty %}
+                    <div class="no-comments-yet">No comments yet.</div>
+                    {% endfor %}
+
+                </div>
+        
+                <div class="comment-form-container">
+                    <form id="comment-form">
+                        <textarea id="comment-input" placeholder="Add your comment here" required></textarea>
+                        <input type="text" id="name-input" placeholder="Name" required>
+                        <input type="email" id="email-input" placeholder="E-mail" required>
+                        <button type="submit" id="submit-button">Post Comment</button>
+                    </form>
                 </div>
             </div>
-        </div>
+
+
 
 
     </div>
     <!-- Post Detail Wrapper End -->
+
+
+
 
 
         <!-- Popular Posts Start -->
@@ -125,10 +199,71 @@
     </div>
     <!-- Scrollable Post END -->
 
+
 {% endblock forcontent%}
 
 
 {% block forscript %}
 
+
+
+<script >
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var postDetailCommentSection =document.querySelector(".post-detail-comment-section");
+        var isAuthenticatedUser=postDetailCommentSection.getAttribute("data-authenticated");
+        var nameInput = document.getElementById('name-input');
+        var emailInput = document.getElementById('email-input');
+        if(isAuthenticatedUser=="True"){
+            console.log("user is authenticated",isAuthenticatedUser);
+            nameInput.removeAttribute('required');
+            emailInput.removeAttribute('required');
+            nameInput.style.display = 'none';
+            emailInput.style.display = 'none';
+        }
+
+    });
+
+    const commentInput = document.getElementById('comment-input');
+    const submitButton = document.getElementById('submit-button');
+
+    commentInput.addEventListener('input', function() {
+        if (commentInput.value.trim() !== '') {
+            submitButton.style.visibility = 'visible';
+        } else {
+            submitButton.style.visibility = 'hidden';
+        }
+    });
+
+    document.getElementById('comment-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const nameInput = document.getElementById('name-input').value;
+        const username="{{request.user.username}}"
+        const emailInput = document.getElementById('email-input').value;
+        const commentInputText = document.getElementById('comment-input').value;
+
+        if (commentInputText.trim() !== '') {
+            const newComment = document.createElement('div');
+            newComment.classList.add('comment');
+            if(nameInput.trim()===""){
+                newComment.innerHTML =`<span>{{request.user.username}} : <span class="bending-text">[bending]</span></span><span class="comment-date">just now</span><p>${commentInputText}</p>`;
+            }else{
+                newComment.innerHTML =`<span>${nameInput}: <span class="bending-text">[bending]</span></span><span class="comment-date">just now</span><p>${commentInputText}</p>`;              
+            }
+           
+
+            document.querySelector('.comments-container').appendChild(newComment);
+
+            document.getElementById('name-input').value = '';
+            document.getElementById('email-input').value = '';
+            document.getElementById('comment-input').value = '';
+
+            submitButton.style.visibility = 'hidden'; 
+        }
+    });
+
+</script>
 
 {% endblock forscript%}

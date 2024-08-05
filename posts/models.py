@@ -129,6 +129,7 @@ class PostComments(models.Model):
     email = models.EmailField(blank=True)
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     session_id = models.CharField(max_length=255, null=True, blank=True)
+    published=models.BooleanField(default=False)
 
     def __str__(self):
         if self.user:
@@ -140,41 +141,23 @@ class PostComments(models.Model):
 
 
 
+
+
 @receiver(post_save, sender=PostLikes)
 @receiver(post_delete, sender=PostLikes)
 def update_post_likes_count(sender, instance, **kwargs):
     if instance.post:
-        if kwargs.get('signal') == post_save:
-            instance.post.likes_count = F('likes_count') + 1
-        else:
-            instance.post.likes_count = F('likes_count') - 1
+        instance.post.likes_count = PostLikes.objects.filter(post=instance.post).count()
         instance.post.save(update_fields=['likes_count'])
+
+
 
 @receiver(post_save, sender=PostComments)
 @receiver(post_delete, sender=PostComments)
 def update_post_comments_count(sender, instance, **kwargs):
     if instance.post:
-        if kwargs.get('signal') == post_save:
-            instance.post.comments_count = F('comments_count') + 1
-        else:
-            instance.post.comments_count = F('comments_count') - 1
+        instance.post.comments_count = PostComments.objects.filter(post=instance.post).count()
         instance.post.save(update_fields=['comments_count'])
-
-# @receiver(post_save, sender=PostLikes)
-# @receiver(post_delete, sender=PostLikes)
-# def update_post_likes_count(sender, instance, **kwargs):
-#     if instance.post:
-#         instance.post.likes_count = PostLikes.objects.filter(post=instance.post).count()
-#         instance.post.save(update_fields=['likes_count'])
-
-
-
-# @receiver(post_save, sender=PostComments)
-# @receiver(post_delete, sender=PostComments)
-# def update_post_comments_count(sender, instance, **kwargs):
-#     if instance.post:
-#         instance.post.comments_count = PostComments.objects.filter(post=instance.post).count()
-#         instance.post.save(update_fields=['comments_count'])
 
 
 
