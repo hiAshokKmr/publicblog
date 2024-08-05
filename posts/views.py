@@ -66,6 +66,7 @@ class PostListView(ListView):
         if language_name:
             try:
                 language_instance = Language.objects.get(name=language_name)
+                print("language selected")
                 filters &= Q(language=language_instance)
             except Language.DoesNotExist:
                 pass  # If the language is not found, don't filter by language
@@ -74,6 +75,7 @@ class PostListView(ListView):
         if category_name:
             try:
                 category_instance = Category.objects.get(name=category_name)
+                print("catergory selected")
                 filters &= Q(category=category_instance)
             except Category.DoesNotExist:
                 pass  # If the category is not found, don't filter by category
@@ -168,15 +170,29 @@ class PostDetailView(DetailView):
         context['csrf_token'] = get_token(self.request)
         user = self.request.user
         post = self.get_object()
-                # Ensure user is authenticated
+        # context={
+        #     "share_post_title":post.title,
+        #     "share_post_thumbnail":post.thumbnail.url,
+        #     "share_post_description":"Check this post!!!!!!",
+        #     "share_post_url":post.get_absolute_url,
+        # }
+        context['share_post_description']="Check this out!"
+        context['share_post_thumbnail']=self.request.build_absolute_uri(post.thumbnail.url)
+        context['share_post_title']=post.title
+        context['share_post_url']=self.request.build_absolute_uri(post.get_absolute_url())
+        # Ensure user is authenticated
         if isinstance(user, AnonymousUser):
             context['user_liked'] = False  # or handle as per your logic for anonymous users
         else:
             post = self.get_object()
             context['user_liked'] = PostLikes.objects.filter(user=user, post=post).exists()
         
+        check_user=self.request.user.is_authenticated
+        context["check_user"]=check_user
+
         context['random_posts'] = self.get_random_posts()
         context['related_posts'] = self.get_related_posts(post)
+        
         return context
 
     def post(self, request, *args, **kwargs):

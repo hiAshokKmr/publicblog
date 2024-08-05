@@ -22,6 +22,7 @@ class PostLikesInline(admin.TabularInline):
 
 class PostCommentsInline(admin.TabularInline):
     model = PostComments
+    fields=['published','text','user','name','email','ip_address','session_id']
     extra = 1
 
 
