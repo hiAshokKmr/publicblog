@@ -131,6 +131,9 @@ class PostComments(models.Model):
     session_id = models.CharField(max_length=255, null=True, blank=True)
     published=models.BooleanField(default=False)
 
+
+
+
     def __str__(self):
         if self.user:
             return f"{self.user} commented on {self.post}"

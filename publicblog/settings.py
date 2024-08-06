@@ -54,11 +54,18 @@ INSTALLED_APPS = [
 
 
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
          'width': 'auto',
+        'uploadUrl': '/ckeditor/upload/',  
+        'filebrowserUploadUrl': '/ckeditor/upload/',
+        'filebrowserBrowseUrl': '/ckeditor/browse/',
+        'filebrowserImageBrowseUrl': '/ckeditor/browse/?type=images',  # URL to browse images
+        'filebrowserUploadUrl': '/ckeditor/upload/?type=files',  # URL to upload files
+        'filebrowserImageUploadUrl': '/ckeditor/upload/?type=images',
 
     }
 }

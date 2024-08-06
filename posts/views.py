@@ -2,6 +2,7 @@
 
 from datetime import timezone
 import json
+import logging
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
@@ -136,6 +137,7 @@ class PostListView(ListView):
 
 
 
+
 class PostDetailView(DetailView):
     model = Post
     template_name = 'posts/detailview.html'
@@ -170,12 +172,6 @@ class PostDetailView(DetailView):
         context['csrf_token'] = get_token(self.request)
         user = self.request.user
         post = self.get_object()
-        # context={
-        #     "share_post_title":post.title,
-        #     "share_post_thumbnail":post.thumbnail.url,
-        #     "share_post_description":"Check this post!!!!!!",
-        #     "share_post_url":post.get_absolute_url,
-        # }
         context['share_post_description']="Check this out!"
         context['share_post_thumbnail']=self.request.build_absolute_uri(post.thumbnail.url)
         context['share_post_title']=post.title
@@ -195,40 +191,68 @@ class PostDetailView(DetailView):
         
         return context
 
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        slug = request.POST["slug"]
-        post = get_object_or_404(Post, slug=slug)
 
-        
-        if "like" in request.POST:
-            like_instance = PostLikes.objects.filter(user=user, post=post)
-            if not like_instance.exists():
-                PostLikes.objects.create(user=user, post=post)
-                liked = True
-            else:
-                like_instance.delete()
-                liked = False
-            post.likes_count = PostLikes.objects.filter(post=post).count()
-            post.save(update_fields=['likes_count'])
-            return JsonResponse({"liked": liked, "like_count": post.likes_count})
-        
-                
-        elif  "comment" in request.POST:
-            print(f'yes : comment is clicked  is ')
-            comment_text = request.POST.get('comment')
-            print(f'yes : here is it {comment_text}')
-            if comment_text:
-                new_comment = PostComments.objects.create(post=post, user=user, text=comment_text)
+        # user = request.user
+        # slug = request.POST["slug"]
+        # post = get_object_or_404(Post, slug=slug)
+
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+
+    def post(self, request, *args, **kwargs):
+        if request.content_type == 'application/json':
+            try:
+                data = json.loads(request.body)
+                name = data.get('name')
+                email = data.get('email')
+                comment_text = data.get('comment')
+                slug = data.get('slug')
+                user = request.user
+                post = get_object_or_404(Post, slug=slug)
+                session_id = request.session.session_key
+                ip_address = self.get_client_ip(request)
+                print(f"Received data: Name: {name}, Email: {email}, Comment: {comment_text}, Slug: {slug}")
+
+                if comment_text:
+                # Logging for debugging
+                    comment = PostComments.objects.create(
+                        post=post,
+                        text=comment_text,
+                        user=user if user.is_authenticated else None,
+                        name=name if not user.is_authenticated else '',
+                        email=email if not user.is_authenticated else '',
+                        ip_address=ip_address,
+                        session_id=session_id,
+                        published=False
+                    )
                 post.comments_count = PostComments.objects.filter(post=post).count()
                 post.save(update_fields=['comments_count'])
-                return JsonResponse({
-                    'user': user.username,
-                    'text': new_comment.text,
-                    'created_at': new_comment.created.strftime('%d-%b-%Y'),
-                    'comment_count': post.comments_count
-                })
+                   
+
+                return JsonResponse({'status': 'success'}, status=200)
+
+            except json.JSONDecodeError as e:
+                return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+
+            except Post.DoesNotExist as e:
+                return JsonResponse({'status': 'error', 'message': 'Post not found'}, status=404)
+
+            except Exception as e:
+                return JsonResponse({'status': 'error', 'message': 'Server error'}, status=500)
+
+        # If not a JSON request, proceed with the default form handling
         return super().post(request, *args, **kwargs)
+        
+
+
+
+
 
 
 
@@ -263,7 +287,7 @@ class PostCreateView(CreateView):
 class PostUpdateView(LoginRequiredMixin,UpdateView):
     model = Post
     template_name = 'posts/updatepost.html'
-    success_url = reverse_lazy('blogpost:post-home')
+    success_url = reverse_lazy('blogpost:user-dashboard')
     login_url=reverse_lazy('blogpost:post-home')
     
 
@@ -287,11 +311,54 @@ class PostUpdateView(LoginRequiredMixin,UpdateView):
         # Optionally, add these details to your model
         form.instance.session_id = session_id
         form.instance.ip_address = ip_address
+        post.published=False
         post.save()
 
         return super().form_valid(form)
+
+
+
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    model = Post
+    template_name = 'posts/deletepost.html' 
+    success_url = reverse_lazy('blogpost:user-dashboard') 
+    login_url = reverse_lazy('blogpost:post-home')
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(author=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+
+class UserDashBoard(LoginRequiredMixin,ListView):
+    model = Post
+    template_name = 'posts/user_dashboard.html'  
+    login_url=reverse_lazy('blogpost:post-home')
+
+    def get_queryset(self):
+        user = self.request.user
+        return Post.objects.filter(author=user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['published_posts'] = Post.objects.filter(author=user, published=True)
+        context['bending_posts'] = Post.objects.filter(author=user, published=False)
+        context['published_count'] = Post.objects.filter(author=user, published=True).count()
+        context['bending_count'] =Post.objects.filter(author=user, published=False).count()
+        return context
     
 
+class UserDashboardPostDetailView(LoginRequiredMixin,DetailView):
 
-def user_dashboard(request):
-    return render(request, 'posts/user_dashboard.html')
+    model = Post
+    template_name = 'posts/user_dashboard_post_detailview.html'  
+    login_url=reverse_lazy('blogpost:post-home')
+
+    def get_object(self):
+        slug = self.kwargs.get("slug")
+        return get_object_or_404(Post, slug=slug, author=self.request.user)
+    
+

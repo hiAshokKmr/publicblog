@@ -19,122 +19,86 @@
 {% block forcontent %}
 
     <!-- Post Detail Wrapper Start -->
-    <div class="post-detail-wrapper" >
-        
-        <p>{{share_post_description}}</p>
-        <p>{{share_post_title}}</p>
-        <p>{{share_post_url}}</p>
-
-            <div class="post-detail-main-content">
-
-                <div class="post-detail-title">{{post.title}}</div>
-                <div class="post-detail-header">
-                    {% if post.author.profile_picture %}
-                        <img  class="remove-transition"   src="{{ post.author.profile_picture.url }}" alt="Author" class="post-detail-author-image">
-                    {% else %}
-                        <img src="{% static 'posts/images/default_profile.png' %}" alt="Author" class="post-detail-author-image">
-                    {% endif %}
-
-                    <div class="post-detail-author">{{ post.author.username|default:"Anonymous" }}</div>
-                    <div class="post-detail-share-icons">
-
-                        <a href="https://api.whatsapp.com/send?text=Check%20this%20out!%0A%0A{{ share_post_title }}%0A%0A{{ share_post_description }}%0A%0A{{ share_post_thumbnail }}%0A%0A{{ share_post_url }}" target="_blank">
-                            <img src="{% static 'posts/images/whatsapp.png' %}" alt="WhatsApp">
-                        </a>
-
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_post_url }}" target="_blank">
-                            <img src="{% static 'posts/images/facebook.png' %}" alt="Facebook">
-                        </a>
-
-                        <a href="https://twitter.com/intent/tweet?text={{ share_post_title }}%0A%0A{{ share_post_description }}%0A%0A{{ share_post_url }}" target="_blank">
-                            <img src="{% static 'posts/images/twitter.png' %}" alt="Twitter">
-                        </a>
-
-                    </div>
+    <div class="post-detail-wrapper">
+        <div class="post-detail-main-content">
+            <h5 class="post-detail-title">{{ post.title }}</h5>
+            <div class="post-detail-header">
+                {% if post.author.profile_picture %}
+                    <img src="{{ post.author.profile_picture.url }}" alt="Author" class="post-detail-author-image">
+                {% else %}
+                    <img src="{% static 'posts/images/default_profile.png' %}" alt="Author" class="post-detail-author-image">
+                {% endif %}
+                <div class="post-detail-author">{{ post.author.username|default:"Anonymous" }}</div>
+                <div class="post-detail-share-icons">
+                    <a href="https://api.whatsapp.com/send?text=Check%20this%20out!%0A%0A{{ share_post_title }}%0A%0A{{ share_post_description }}%0A%0A{{ share_post_thumbnail }}%0A%0A{{ share_post_url }}" target="_blank">
+                        <img src="{% static 'posts/images/whatsapp.png' %}" alt="WhatsApp">
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_post_url }}" target="_blank">
+                        <img src="{% static 'posts/images/facebook.png' %}" alt="Facebook">
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?text={{ share_post_title }}%0A%0A{{ share_post_description }}%0A%0A{{ share_post_url }}" target="_blank">
+                        <img src="{% static 'posts/images/twitter.png' %}" alt="Twitter">
+                    </a>
                 </div>
-                <div class="post-detail-content">
-
-
-
-                    <img class="remove-transition"  src="{{share_post_thumbnail}}" alt="thumbnail" width="100%" height="400px">
-                    
-
-                    {{post.content|safe}}
-                
-                </div>
-
             </div>
-
-
-            <div class="post-detail-comment-section" data-authenticated="{{check_user}}">
-
-                <div class="comments-container">
-
-                    
-
-                    <div class="comment-vote-container">
-                        <div class="comment-vote-item">
-                            <img src="{% static 'posts/images/comment.png' %}" > <!-- Comment icon -->
-                            <span>{{ post.comments_count }} Comments</span>
-                        </div>
-                        <div class="comment-vote-item">
-                            <img src="{% static 'posts/images/vote_black.png' %}" >
-                            <span>{{ post.likes_count }} Votes</span>
-                        </div>
+            <div class="post-detail-content">
+                {{ post.content|safe }}
+                <img class="thumbnail-image" src="{{ share_post_thumbnail }}" alt="thumbnail">
+            </div>
+        </div>
+        <div class="post-detail-comment-section" data-authenticated="{{ check_user }}">
+            <div class="comments-container">
+                <div class="comment-vote-container">
+                    <div class="comment-vote-item">
+                        <img src="{% static 'posts/images/comment.png' %}" alt="Comment icon">
+                        <span>{{ post.comments_count }} Comments</span>
                     </div>
-
-                    {% for comment in post.postcomments_set.all %}
-
-                    <div class="comment">
-                        {% if comment.user %}
-                        <span>
-                            {{ comment.user.username }} :
-                            {% if not comment.published %}
-                                <span class="bending-text">[bending]</span>
-                            {% endif %}
-                        </span>
+                    <div class="comment-vote-item">
+                        <img src="{% static 'posts/images/vote_black.png' %}" alt="Vote icon">
+                        <span>{{ post.likes_count }} Votes</span>
+                    </div>
+                </div>
+                {% for comment in post.postcomments_set.all %}
+                <div class="comment">
+                    {% if comment.user %}
+                    <span>{{ comment.user.username }} :
+                        {% if not comment.published %}
+                        <span class="pending-text">[pending]</span>
+                        {% endif %}
+                    </span>
                     {% elif comment.name %}
-                        <span>
-                            {{ comment.name }} :
-                            {% if not comment.published %}
-                                <span class="bending-text">[bending]</span>
-                            {% endif %}
-                        </span>
+                    <span>{{ comment.name }} :
+                        {% if not comment.published %}
+                        <span class="pending-text">[pending]</span>
+                        {% endif %}
+                    </span>
                     {% else %}
-                        <span>
-                            public user :
-                            {% if not comment.published %}
-                                <span class="bending-text">[bending]</span>
-                            {% endif %}
-                        </span>
+                    <span>public user :
+                        {% if not comment.published %}
+                        <span class="pending-text">[pending]</span>
+                        {% endif %}
+                    </span>
                     {% endif %}
-                        
-                        <span class="comment-date">{{comment.created|date:"d"}}{{comment.created|date:"M Y"}}</span>
-                        {% if comment.published %}
-                        <p>{{comment.text}}</p>
-                        {%else%}
-                        <p>waiting for approval</p>
-                        {%endif%}
-                    </div>
-                    {% empty %}
-                    <div class="no-comments-yet">No comments yet.</div>
-                    {% endfor %}
-
+                    <span class="comment-date">{{ comment.created|date:"d M Y" }}</span>
+                    {% if comment.published %}
+                    <p>{{ comment.text }}</p>
+                    {% else %}
+                    <p>waiting for approval</p>
+                    {% endif %}
                 </div>
-        
-                <div class="comment-form-container">
-                    <form id="comment-form">
-                        <textarea id="comment-input" placeholder="Add your comment here" required></textarea>
-                        <input type="text" id="name-input" placeholder="Name" required>
-                        <input type="email" id="email-input" placeholder="E-mail" required>
-                        <button type="submit" id="submit-button">Post Comment</button>
-                    </form>
-                </div>
+                {% empty %}
+                <div class="no-comments-yet">No comments yet.</div>
+                {% endfor %}
             </div>
-
-
-
-
+            <div class="comment-form-container">
+                <form id="comment-form">
+                    <textarea id="comment-input" placeholder="Add your comment here" required></textarea>
+                    <input type="text" id="name-input" placeholder="Name" required>
+                    <input type="email" id="email-input" placeholder="E-mail" required>
+                    <button type="submit" id="submit-button">Post Comment</button>
+                </form>
+            </div>
+        </div>
     </div>
     <!-- Post Detail Wrapper End -->
 
@@ -236,6 +200,8 @@
         }
     });
 
+
+
     document.getElementById('comment-form').addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -262,8 +228,46 @@
 
             submitButton.style.visibility = 'hidden'; 
         }
-    });
 
+
+        fetch("{% url 'blogpost:post-detail' slug=post.slug %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+                name: nameInput,
+                email: emailInput,
+                comment: commentInputText,
+                slug: "{{post.slug}}",
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json(); 
+        })
+        .then(data => {
+            if (data.status === 'success') {
+            } else {
+                alert('Failed to submit comment: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error submitting comment: ' + error.message);
+        });
+        
+
+
+
+
+
+
+        
+    });
 </script>
 
 {% endblock forscript%}
