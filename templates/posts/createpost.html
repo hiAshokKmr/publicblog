@@ -77,5 +77,10 @@
             <button type="submit" class="btn-primary">Create</button>
         </form>
     </div>
+    {% comment %} <script>
+        CKEDITOR.replace('{{ form.content.id_for_label }}', {
+            customConfig: '{% static "posts/js/ckeditor.js" %}'
+        });
+    </script> {% endcomment %}
 </body>
 </html>

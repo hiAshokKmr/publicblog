@@ -35,12 +35,14 @@
             <!-- mobile -->
             <ul id="mobile-sidebar" class="mobile-sidebar">
                 <li onclick="hideSideBar()"><a href="#"><i class="fas fa-times"></i>close </a></li>
+                {% if request.user.is_authenticated %}
                 <!-- sidebar user profile -->
                 <div class="userprofile-container">
-                    <img class="sidebar-profile-image" src="{% static "posts/images/default_profile.png" %}" alt="">
-                    <h4>username</h4>
+                    <img class="sidebar-profile-image" src="{{request.user.profile_picture.url}}" alt="profileimage" class="remove-transition">
+                    <h4>{{request.user.username}}</h4>
                 </div>
                 <!-- sidebar user profile END-->
+                 {% endif %}
 
                 <!-- lanuage START-->
                 <div class="sidebar-menu">
@@ -81,7 +83,7 @@
                     <!-- category  END -->
                     <div class="sidebar-menu-item"><a href="{% url 'blogpost:post-create' %}"><i class="fas fa-rectangle-list"></i>Write Post</a></div>
                     {% if request.user.is_authenticated %}
-                    <div class="sidebar-menu-item"><a href=""><i class="fas fa-rectangle-list"></i>Dashboard</a></div>
+                    <div class="sidebar-menu-item"><a href="{% url 'blogpost:user-dashboard' %}"><i class="fas fa-rectangle-list"></i>Dashboard</a></div>
                     {% endif %}
                     <div class="sidebar-menu-item"><a href=""><i class="fas fa-circle-info"></i>About</a></div>
                     {% if request.user.is_authenticated %}
@@ -119,7 +121,7 @@
                 </li>
                 <li class="hideOnMobile"><a href="{% url 'blogpost:post-create' %}" class="" ><i class="fa-solid fa-pen-to-square create-post-icon"></i>Write Post</a></li>
                 {% if request.user.is_authenticated %}
-                <li class="hideOnMobile"><a href="#" class="" ><i class="fas fa-rectangle-list"></i>Dashboard</a></li>
+                <li class="hideOnMobile"><a href="{% url 'blogpost:user-dashboard' %}" class="" ><i class="fas fa-rectangle-list"></i>Dashboard</a></li>
                 {% endif %}
                 <li class="hideOnMobile"><a href="#"><i class="fas fa-circle-info"></i>About</a></li>
                 {% if request.user.is_authenticated %}
@@ -135,7 +137,7 @@
 
     <div class="content-container">
 
-        
+
 
         <!-- Main content goes here -->
 {% block forcontent %}
@@ -153,6 +155,7 @@
     <!-- Content Container End -->
      
 
+
     <!-- Create post Floating Action Button -->
     <div class="create-post-container">
         <a href="{% url 'blogpost:post-create' %}" class="create-post-link">
@@ -164,8 +167,13 @@
 
     <!-- Create post Floating Action Button end -->
 
-                    <!-- FOOTER START -->
+
+
+
+         <!-- FOOTER START -->
             <footer>
+
+                
                 <div class="footer-container">
                     <div class="footer-row">
                             <div class="footer-col">

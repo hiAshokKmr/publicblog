@@ -5,11 +5,14 @@ from  .views import *
 
 app_name="blogpost"
 urlpatterns=[
-    path("dashboard/",user_dashboard,name="user-dashboard"),   
+    path("dashboard/",UserDashBoard.as_view(),name="user-dashboard"),   
+    path("dashboard/<slug:slug>/", UserDashboardPostDetailView.as_view(), name='user-dashboard-post-detail'),
+    path('dashboard/<slug:slug>/update/', PostUpdateView.as_view(), name='post-update'),
+      path('dashboard/<slug:slug>/delete/', PostDeleteView.as_view(), name='post-delete'),
     path("writepost",PostCreateView.as_view(),name="post-create"),   
     path("",PostListView.as_view(),name="post-home"),
     path("<slug>/",PostDetailView.as_view(),name="post-detail"),   
-    path('<slug:slug>/update/', PostUpdateView.as_view(), name='post-update'),
+   
 
     
 ]

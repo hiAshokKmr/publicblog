@@ -1,275 +1,130 @@
 {% load static %}
-{}
-
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'posts/css/user_dashboard.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Dashboard</title>
     <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
 
-      body {
-        font-family: Arial, sans-serif;
-      }
 
-      .dashboard-container {
-        padding: 10px;
-        max-width: 100%;
-        margin: 0 auto;
-        background-color: #f0f0f0;
-      }
-
-      /* User Profile Section */
-      .user-profile {
-        display: flex;
-        flex-direction: column;
-        padding: 20px;
-        background-color: #ccc;
-        margin-bottom: 20px;
-        border-radius: 10px;
-      }
-
-      .profile-row {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-
-      .profile-image img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        margin-right: 20px;
-      }
-
-      .profile-info p {
-        font-size: 18px;
-        margin-bottom: 10px;
-      }
-
-      .profile-stats {
-        display: flex;
-        justify-content: space-between;
-        font-weight: bold;
-      }
-
-      /* User Posts Section */
-      .user-posts {
-        background-color: #ccc;
-        padding: 20px;
-        border-radius: 10px;
-      }
-
-      .select-section {
-        text-align: right;
-        margin-bottom: 20px;
-      }
-
-      select {
-        padding: 5px;
-        font-size: 16px;
-      }
-
-      .posts-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 10px;
-      }
-
-      .post-item {
-        position: relative;
-        background-color: #444;
-        border: 2px solid #333;
-        border-radius: 10px;
-        overflow: hidden;
-      }
-
-      .post-image img {
-        width: 100%;
-        height: auto;
-      }
-
-      .post-title {
-        background-color: #4caf50;
-        padding: 10px;
-        text-align: center;
-        color: white;
-        font-weight: bold;
-      }
-
-      .pending-label {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.3);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        font-size: 24px;
-        font-weight: bold;
-      }
-
-      /* Responsive Design */
-      @media screen and (max-width: 600px) {
-        .profile-row {
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .profile-info p {
-          text-align: center;
-        }
-
-        .profile-stats {
-          flex-direction: column;
-          align-items: center;
-        }
-      }
     </style>
   </head>
 
   <body>
     <div class="dashboard-container">
-      <!-- User Profile Section -->
-      <div class="user-profile">
-        <div class="profile-row">
-          <div class="profile-image">
-            <img src="profile.jpg" alt="Profile Image" />
-          </div>
-          <div class="profile-info">
-            <p>Username: User</p>
-            <p>Email Id: user@gmail.com</p>
-          </div>
-        </div>
-        <div class="profile-stats">
-          <p>Published Post: 10</p>
-          <p>Pending Posts: 5</p>
-        </div>
-      </div>
-
-      <!-- User Posts Section -->
-      <div class="user-posts">
-        <div class="select-section">
-          <select id="post-select" onchange="filterPosts()">
-            <option value="all">Select</option>
-            <option value="pending">Pending Posts</option>
-            <option value="published">Published Posts</option>
-          </select>
-        </div>
-
-        <div class="posts-grid" id="posts-grid">
-          <!-- Published Posts -->
-
-          <div class="post-item published">
-            <div class="post-image">
-              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
+          <!-- User Profile Section -->
+          <div class="user-profile">
+            <div class="profile-row">
+              <div class="profile-image">
+                <img src="{{request.user.profile_picture.url}}" alt="Profile Image" />
+              </div>
+              <div class="profile-info">
+                <p>{{request.user.username}}</p>
+                <p>{{request.user.email}}</p>
+              </div>
             </div>
-            <div class="post-title">
-              <p>Published Post 1</p>
+            <div class="profile-stats">
+              <p>Published Post: {{published_count}}</p>
+              <p>Pending Posts: {{bending_count}}</p>
             </div>
           </div>
 
-          <div class="post-item published">
-            <div class="post-image">
-              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
-            </div>
-            <div class="post-title">
-              <p>Published Post 1</p>
-            </div>
-          </div>
+          <!-- User Posts Section Start-->
+          <div class="user-posts">
 
-          <div class="post-item published">
-            <div class="post-image">
-              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
-            </div>
-            <div class="post-title">
-              <p>Published Post 1</p>
-            </div>
-          </div>
+              <div class="select-section">
+                <button class="create-post-btn"  id="create-brn-url">Create Post 
+                  <i class="fa-solid fa-pen-to-square create-post-icon"></i></button>
+                <select id="post-select" onchange="filterPosts()">
+                  <option value="all">All</option>
+                  <option value="pending">Pending Posts</option>
+                  <option value="published">Published Posts</option>
+                </select>
+              </div>
+                <!-- Post Grid  Start -->
+              <div class="posts-grid" id="posts-grid">
+                
 
-          <div class="post-item published">
-            <div class="post-image">
-              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
-            </div>
-            <div class="post-title">
-              <p>Published Post 1</p>
-            </div>
-          </div>
+                {% if published_posts.count == 0 and bending_posts.count == 0 %}
+                <p class="no-posts">You don's have Anyposts</p>
+                {% endif %}
 
-          <div class="post-item published">
-            <div class="post-image">
-              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
-            </div>
-            <div class="post-title">
-              <p>Published Post 1</p>
-            </div>
-          </div>
 
-          <div class="post-item published">
-            <div class="post-image">
-              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
-            </div>
-            <div class="post-title">
-              <p>Published Post 2</p>
-            </div>
-          </div>
 
-          <!-- Pending Posts -->
-          <div class="post-item pending" style="display: none">
-            <div class="pending-label">Pending</div>
-            <div class="post-image">
-              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
-            </div>
-            <div class="post-title">
-              <p>Pending Post 1</p>
-            </div>
-          </div>
+                <!-- Published Posts Start -->
+                {% for post in published_posts %}
+                <div class="post-item published" data-url="{% url 'blogpost:user-dashboard-post-detail' slug=post.slug %}">
+                  <div class="post-image">
+                    <img src="{{post.thumbnail.url}}" alt="Image" />
+                  </div>
+                  <div class="post-title">
+                    <p>{{post.title}}</p>
+                  </div>
+                </div>
+                {% endfor %}
+                <!-- Published Posts End -->
 
-          <div class="post-item pending" style="display: none">
-            <div class="pending-label">Pending</div>
-            <div class="post-image">
-              <img src="{%static 'posts/images/postimage.png' %}" alt="Image" />
-            </div>
-            <div class="post-title">
-              <p>Pending Post 2</p>
-            </div>
-          </div>
 
-          <!-- Add more post items as needed -->
-        </div>
-      </div>
-    </div>
+                <!-- Pending Posts Start -->
+                {% for post in bending_posts %}
+                <div class="post-item pending" data-url="{% url 'blogpost:user-dashboard-post-detail' slug=post.slug %}" style="display: none">
+                  <div class="pending-label">Pending</div>
+                  <div class="post-image">
+                    <img src="{{post.thumbnail.url}}" alt="Image" />
+                  </div>
+                  <div class="post-title">
+                    <p>{{post.title}}</p>
+                  </div>
+                </div>
+                {% endfor %}
+                <!-- Pending Posts End -->
+
+
+              </div>
+              <!-- User Post End -->
+          </div>
+            <!-- User Posts Section End -->
+
+
+  </div>
 
     <script>
       function filterPosts() {
         var select = document.getElementById("post-select");
         var value = select.value;
         var posts = document.querySelectorAll(".post-item");
-
+      
         posts.forEach(function (post) {
           if (value === "all") {
             post.style.display = "block";
           } else if (value === "pending") {
-            post.style.display = post.classList.contains("pending")
-              ? "block"
-              : "none";
+            post.style.display = post.classList.contains("pending") ? "block" : "none";
           } else if (value === "published") {
-            post.style.display = post.classList.contains("published")
-              ? "block"
-              : "none";
+            post.style.display = post.classList.contains("published") ? "block" : "none";
           }
         });
       }
+      
+      // Call filterPosts initially to show all posts when the page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        filterPosts();
+      
+        document.querySelectorAll('.post-item').forEach(function(div) {
+          div.addEventListener('click', function() {
+            var url = div.getAttribute('data-url');
+            window.location.href = url;
+          });
+        });
+
+        document.getElementById('create-brn-url').addEventListener('click', function() {
+          window.location.href ='{% url 'blogpost:post-create' %}'; 
+        });
+
+      });
     </script>
   </body>
 </html>

@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Detail</title>
+    <link rel="stylesheet" href="{% static 'posts/css/user_dashboard_post_detailview.css' %}">
+    <style>
+
+    </style>
+  </head>
+  <body>
+    <div class="post-detail-container">
+      <div class="post-header">
+        <h1 class="post-title">{{ post.title }}</h1>
+        <div class="post-meta">
+          <span>Category: {{ post.category }}</span>
+          <span>Language: {{ post.language }}</span>
+          <span>Created: {{ post.created }}</span>
+          <span>Updated: {{ post.updated }}</span>
+          <span>Likes: {{ post.likes_count }}</span>
+          <span>Comments: {{ post.comments_count }}</span>
+          <span>Published: {{ post.published }}</span>
+        </div>
+      </div>
+
+      <div class="post-thumbnail">
+        <img src="{{ post.thumbnail.url }}" alt="Post Thumbnail">
+        <div class="thumbnail-title">{{ post.thumbnail_title }}</div>
+      </div>
+
+      <div class="post-content">
+        {{ post.content|safe }}
+      </div>
+
+      <div class="post-actions">
+        <button id="update-btn" data-url="{% url 'blogpost:post-update' slug=post.slug %}">Update</button>
+        <button id="delete-btn" data-url="{% url 'blogpost:post-delete' slug=post.slug %}" >Delete</button>
+      </div>
+    </div>
+
+    <script>
+        document.getElementById('update-btn').addEventListener('click', function() {
+            var url = this.getAttribute('data-url');
+            if (url) {
+                window.location.href = url; 
+            } else {
+                console.log('Update URL not provided');
+            }
+        });
+
+      document.getElementById('delete-btn').addEventListener('click', function() {
+        var url = this.getAttribute('data-url');
+        if (url) {
+            window.location.href = url; 
+        } else {
+            console.log('Update URL not provided');
+        }
+      });
+      
+    </script>
+  </body>
+</html>
