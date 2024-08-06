@@ -53,10 +53,10 @@
                         <img src="{% static 'posts/images/comment.png' %}" alt="Comment icon">
                         <span>{{ post.comments_count }} Comments</span>
                     </div>
-                    <div class="comment-vote-item">
+                    {% comment %} <div class="comment-vote-item">
                         <img src="{% static 'posts/images/vote_black.png' %}" alt="Vote icon">
                         <span>{{ post.likes_count }} Votes</span>
-                    </div>
+                    </div> {% endcomment %}
                 </div>
                 {% for comment in post.postcomments_set.all %}
                 <div class="comment">

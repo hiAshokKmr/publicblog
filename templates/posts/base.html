@@ -87,12 +87,13 @@
                     {% endif %}
                     <div class="sidebar-menu-item"><a href=""><i class="fas fa-circle-info"></i>About</a></div>
                     {% if request.user.is_authenticated %}
-                    <div class="sidebar-menu-item"><a href=""><i class="fas fa-sign-in-alt"></i>Logout</a></div>
+                    <div  class="sidebar-menu-item" id="mobile-logout-button"><a   href=""><i class="fas fa-sign-in-alt"></i>Logout</a></div>
                     {% endif %}
                 
                 </div>
             </ul>
                 <!-- mobile END -->
+
 
 
                 <!-- desktop START -->
@@ -125,7 +126,7 @@
                 {% endif %}
                 <li class="hideOnMobile"><a href="#"><i class="fas fa-circle-info"></i>About</a></li>
                 {% if request.user.is_authenticated %}
-                <li class="hideOnMobile"><a href="#"><i class="fas fa-sign-in-alt "></i>Logout</a></li>
+                <li id="desktop-logout-button" class="hideOnMobile"><a href="#"><i class="fas fa-sign-in-alt "></i>Logout</a></li>
                 {% endif %}
                 <li class="menu-button" onclick="showSideBar()"><a href="#"><i class="fas fa-bars"></i></a></li>
             </ul>
@@ -246,18 +247,19 @@
 
     function getCsrfToken() {
         var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        console.log("CSRF token is:", token);
         return token;
     }
 
 
     function getUrl() {
         var url="{% url 'blogpost:post-home' %}";
-        console.log("url  is:", url);
         return url;
     }
-
-
+    
+    function getLogoutUrl() {
+        var url="{% url 'account_app:logout' %}";
+        return url;
+    }
 
 
     // // Select Language Code Mobile
