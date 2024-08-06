@@ -43,6 +43,10 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("Initial Desktop selected category is", desktopSelectedCategory);
 
 
+  
+
+
+
      
 });
 
@@ -396,3 +400,53 @@ initializeSelection("mobile-selected-language", 'selectedLanguage');
 toggleSubmenu("mobile-selected-category", "sidebar-submenu-category");
 handleSubmenuItemClick("sidebar-submenu-category", "mobile-selected-category", sendMobileSelectedCategory, 'selectedCategory');
 initializeSelection("mobile-selected-category", 'selectedCategory');
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const desktopLogoutButton = document.getElementById('desktop-logout-button');
+    const mobileLogoutButton = document.getElementById('mobile-logout-button');
+
+    if (desktopLogoutButton) {
+        desktopLogoutButton.addEventListener('click', handleLogout);
+    }
+
+    if (mobileLogoutButton) {
+        // alert("hey");
+        console.log('logout url is here ',getUrl());
+        console.log('csrf token is here ',getCsrfToken());
+        mobileLogoutButton.addEventListener('click', handleLogout);
+    }
+});
+
+function handleLogout(){
+    fetch(getLogoutUrl(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCsrfToken()  
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          window.location.href = data.redirect_url; 
+        } else {
+          console.error('Logout failed:', data.error);
+        }
+      })
+      .catch(error => console.error('Error:', error));
+}
+
+
+
+
+    //Logout Start 
+    //Logout End 
