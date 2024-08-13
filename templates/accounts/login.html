@@ -14,8 +14,19 @@
   </head>
 
   <body>
+
+    {% if messages %}
+        <div class="activation-messages">
+            {% for message in messages %}
+                <div class="activation-message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="message-container">
-      <div id="successMessage" class="success-message multicolortext"></div>
+      <div id="successMessage" class="success-message multicolortext">Login Successful askashokkumar.r@gmail.com</div>
       <div id="errorMessage" class="error-message"></div>
     </div>
 
@@ -38,6 +49,7 @@
                   <i class="fa-solid fa-eye-slash" id="toggleLoginPassword"></i>
                 </div>
               </div>
+              <p class="switch-link"><a href='{% url "account_app:password_reset" %}'>Forget Password</a></p>
               <div class="btn-field">
                 <button type="submit" id="loginBtn">Login</button>
               </div>
@@ -45,7 +57,7 @@
             <p class="switch-link">
               Don't have an account?
               <a href='{% url "account_app:register" %}'
-                >Create a new account</a
+                >Create an new account</a
               >
             </p>
           </div>

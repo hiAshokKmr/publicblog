@@ -6,6 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Post Detail</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="{% static 'posts/css/user_dashboard_post_detailview.css' %}">
     <style>
 
@@ -14,6 +15,11 @@
   <body>
     <div class="post-detail-container">
       <div class="post-header">
+
+        <a href="javascript:history.back()" class="go-back-link">
+          <i class="fa-solid fa-arrow-left"></i>Go Back
+      </a>
+
         <h1 class="post-title">{{ post.title }}</h1>
         <div class="post-meta">
           <span>Category: {{ post.category }}</span>

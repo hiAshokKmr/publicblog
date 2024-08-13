@@ -1,13 +1,14 @@
 
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+        
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Russo+One&family=Zilla+Slab+Highlight:wght@400;700&display=swap');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'poppins', sans-serif;
-
+    /* font-family: 'poppins', sans-serif; */
+    font-family: "Inter", sans-serif;
 }
 
 body {
@@ -30,7 +31,7 @@ body {
   }
 
 .message-container {
-    width: 500px;
+    /* width: 500px; */
     position: relative;
     
 }
@@ -46,7 +47,7 @@ body {
 
 .success-message {
     font-weight:500;
-    font-size: 25px;
+    /* font-size: 25px; */
     display: none;
     background-color: rgb(255, 158, 14);
     /* color: #d4d3d3; */
@@ -138,7 +139,6 @@ input {
     width: 100%;
     /* background: rgb(197, 195, 195); */
     background-color: #f8f8f8;
-
     border: 0;
     outline: 0;
     padding: 10px;
@@ -183,7 +183,7 @@ input {
 
 
 .switch-link {
-    margin-top: 20px;
+    margin: 15px auto 15px auto;
 }
 
 .switch-link a {
@@ -197,10 +197,73 @@ input {
 }
 
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 789px) {
     .container {
         width: 90vw;
-        height: 60vh;
+        padding: 10px;
+        /* height: 60vh; */
+    }
+    .input-field {
+        width: 100%;
+    }
+    .message-container{
+        width: 100%;
     }
 
+    /* .success-message{
+        font-size: 13px;
+    } */
+
+}
+
+
+
+
+
+.activation-messages {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999; 
+    text-align: center;
+}
+
+.activation-message {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.activation-message.success {
+    background-color:rgb(255, 158, 14);
+    border: 1px solid  #f8f8f8;
+    border-radius: 10px;
+    text-align: center;
+
+}
+
+.activation-message.error {
+    background-color:rgb(255, 158, 14);
+    border: 1px solid  #f8f8f8;
+    border-radius: 10px;
+    text-align: center;
+}
+
+
+.activation-messages.fade-out {
+    animation: fadeOut 10s forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
 }

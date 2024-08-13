@@ -153,9 +153,16 @@ class PostDetailView(DetailView):
     def get_queryset(self):
         return Post.objects.prefetch_related('postlikes_set', 'postcomments_set')
     
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+    
     def get_random_posts(self):
         random_posts=Post.objects.filter(published=True).order_by('?')[:15]
-        # photo_extention=FileExtensions.PHOTO_EXTENSIONS
         for post in random_posts:
             post.image_url = post.thumbnail.url if post.thumbnail else settings.MEDIA_URL + 'post/default/default_thumbnail.png'  
         return random_posts
@@ -176,12 +183,17 @@ class PostDetailView(DetailView):
         context['share_post_thumbnail']=self.request.build_absolute_uri(post.thumbnail.url)
         context['share_post_title']=post.title
         context['share_post_url']=self.request.build_absolute_uri(post.get_absolute_url())
+        ip_address=self.get_client_ip(self.request)
+        check_like= PostLikes.objects.filter(ip_address=ip_address, post=post).exists()
+        
         # Ensure user is authenticated
-        if isinstance(user, AnonymousUser):
-            context['user_liked'] = False  # or handle as per your logic for anonymous users
+        if check_like:
+            print(f"{ip_address} is liked the post already ")
+            context['user_liked'] = True  
         else:
-            post = self.get_object()
-            context['user_liked'] = PostLikes.objects.filter(user=user, post=post).exists()
+            print(f"{ip_address} is did not liked the post already ")
+            context['user_liked'] = False 
+
         
         check_user=self.request.user.is_authenticated
         context["check_user"]=check_user
@@ -196,13 +208,7 @@ class PostDetailView(DetailView):
         # slug = request.POST["slug"]
         # post = get_object_or_404(Post, slug=slug)
 
-    def get_client_ip(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
+
 
 
     def post(self, request, *args, **kwargs):
@@ -212,6 +218,7 @@ class PostDetailView(DetailView):
                 name = data.get('name')
                 email = data.get('email')
                 comment_text = data.get('comment')
+                like=data.get('like')
                 slug = data.get('slug')
                 user = request.user
                 post = get_object_or_404(Post, slug=slug)
@@ -220,8 +227,7 @@ class PostDetailView(DetailView):
                 print(f"Received data: Name: {name}, Email: {email}, Comment: {comment_text}, Slug: {slug}")
 
                 if comment_text:
-                # Logging for debugging
-                    comment = PostComments.objects.create(
+                    add_comment = PostComments.objects.create(
                         post=post,
                         text=comment_text,
                         user=user if user.is_authenticated else None,
@@ -233,7 +239,30 @@ class PostDetailView(DetailView):
                     )
                 post.comments_count = PostComments.objects.filter(post=post).count()
                 post.save(update_fields=['comments_count'])
-                   
+                
+
+                if like: 
+                    like_instance=PostLikes.objects.filter(ip_address=ip_address)
+                    if not like_instance.exists():
+                        PostLikes.objects.create(
+                            user=user if user.is_authenticated else None,
+                            post=post,
+                            ip_address=ip_address,
+                            session_id=session_id
+                            )
+                        Liked=True
+                        print(f"{request.user.username} is already to liked the post")
+                    else:
+                        like_instance.delete()
+                        Liked=False
+                        print(f"{request.user.username} is not to liked the post")
+                    post.likes_count = PostLikes.objects.filter(post=post).count()
+                    post.save(update_fields=['likes_count'])
+                    return JsonResponse({
+                        'liked':Liked,
+                        'likes_count':post.likes_count,
+
+                        })
 
                 return JsonResponse({'status': 'success'}, status=200)
 
@@ -273,17 +302,16 @@ class PostCreateView(CreateView):
         ip_address = self.request.META.get('REMOTE_ADDR')
         form.instance.session_id = session_id
         form.instance.ip_address = ip_address
+        if self.request.user.is_authenticated:
+            form.instance.author = self.request.user
 
-        if form.is_valid():
-            return super().form_valid(form)
-        else:
-            return self.form_invalid(form)
-
+        return super().form_valid(form)
 
 
 
 
 
+# Update Post
 class PostUpdateView(LoginRequiredMixin,UpdateView):
     model = Post
     template_name = 'posts/updatepost.html'
@@ -293,8 +321,11 @@ class PostUpdateView(LoginRequiredMixin,UpdateView):
 
     def get_form_class(self):
         if self.request.user.is_authenticated:
+            print("registered post create form triggering")
             return AuthenticatedPostCreateForm
+           
         else:
+            print("anonymous post create form triggering ")
             return UnauthenticatedPostCreateForm
 
 
@@ -361,4 +392,7 @@ class UserDashboardPostDetailView(LoginRequiredMixin,DetailView):
         slug = self.kwargs.get("slug")
         return get_object_or_404(Post, slug=slug, author=self.request.user)
     
+
+
+
 

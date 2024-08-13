@@ -127,11 +127,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         document.querySelector(".form-title").style.display = "none";
                         document.querySelector('.server-error-message').style.display = 'none';
                         document.querySelector(".server-success-message").style.display = "block";
-                        document.getElementById('server-success-message-add').textContent = "Account Registration Successfull";
+                        document.getElementById('server-success-message-add').innerHTML = data.message;
                         document.getElementById("registerForm").reset();
                         setTimeout(function () {
                             // window.location.href = loginUrl;
-                            window.location.href = data.redirect_url;
+                            // window.location.href = data.redirect_url;
                         }, 2000);
 
                     } else {

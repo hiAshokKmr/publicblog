@@ -30,9 +30,7 @@ class RegistrationForm(UserCreationForm):
         email_validator=EmailValidator(message="Enter a valid email address.")
         try: 
             email_validator(email)
-            print("good email")
         except ValidationError:
-            print("yes bad email")
             raise forms.ValidationError("Bad Email Address.")
         return email
 
@@ -69,10 +67,8 @@ class RegistrationForm(UserCreationForm):
             # Check if profile_picture is provided, otherwise set default
         if self.cleaned_data.get('profile_picture'):
             user.profile_picture = self.cleaned_data['profile_picture']
-            print("User provided a profile picture")
         else:
             user.profile_picture = default_profile_image_path()
-            print("Default profile picture used")
 
         if commit:
             user.save()
