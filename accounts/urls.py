@@ -16,22 +16,18 @@ app_name="account_app"
 urlpatterns = [
     path('checkauth/', CheckAuthView.as_view(), name='checkauth'),
     path('register/',views.register_view ,name='register'),
+    
     #activate account url
     path('activate/<uidb64>/<token>/',views.activate, name='activate'),
     path('login/', views.login_view,name='login'),
     path('logout/', logout_view, name='logout'),
 
-
+  #pass word reset urls
     path('password-reset/', password_reset_request, name='password_reset'),
 
     path('password-reset-sent/',
          auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_sent.html'),
          name='password_reset_done'),
-
-#     path('password-reset-confirm/<uidb64>/<token>/',
-#          auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_form.html'),
-#                   success_url=reverse_lazy('account_app:password_reset_complete'),
-#          name='password_reset_confirm'),
 
     path('password-reset-confirm/<uidb64>/<token>/',
          password_reset_confirm,

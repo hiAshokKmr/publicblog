@@ -6,7 +6,7 @@ from .models import Account
 
 class CustomUserAdmin(UserAdmin):
     model = Account
-    list_display = ["id", "email", "username", "is_whitelisted", "is_active", "is_admin", "is_staff", "is_superuser"]
+    list_display = ["id", "email", "username", "is_active", "is_admin", "is_staff", "is_superuser"]
     list_display_links = ["email", "username"]
     search_fields = ["email", "username"]
     readonly_fields = ['id', 'date_joined', "last_login"]
@@ -15,14 +15,14 @@ class CustomUserAdmin(UserAdmin):
   
     fieldsets = (
         (None, {'fields': ('email', 'username', 'password', 'profile_picture')}),
-        ('Permissions', {'fields': ('is_admin', 'is_staff', 'is_whitelisted', 'is_active', 'is_superuser')}),
+        ('Permissions', {'fields': ('is_admin', 'is_staff', 'is_active', 'is_superuser')}),
         ('login logout dates', {'fields': ('last_login', 'date_joined')}),
     )
     
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'username', 'password1', 'password2', 'is_admin', 'is_staff', 'is_whitelisted', 'is_active', 'is_superuser','profile_picture')}
+            'fields': ('email', 'username', 'password1', 'password2', 'is_admin', 'is_staff','is_active', 'is_superuser','profile_picture')}
         ),
     )
 
@@ -37,8 +37,8 @@ class CustomUserAdmin(UserAdmin):
             queryset |= self.model.objects.filter(is_admin=True)
         elif search_term_lower == 'find@staff':
             queryset |= self.model.objects.filter(is_staff=True)
-        elif search_term_lower == 'find@whitelisted':
-            queryset |= self.model.objects.filter(is_whitelisted=True)  # Ensure this field exists
+        # elif search_term_lower == 'find@whitelisted':
+        #     queryset |= self.model.objects.filter(is_whitelisted=True)  
         elif search_term_lower == 'find@superuser':
             queryset |= self.model.objects.filter(is_superuser=True)
 
