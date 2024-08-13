@@ -15,7 +15,7 @@ class AuthenticatedPostCreateForm(forms.ModelForm):
     def clean_title(self):
         title = self.cleaned_data.get('title')
         if title and len(title) < 10:
-            raise forms.ValidationError("Title must be at least 50 characters long.")
+            raise forms.ValidationError("Title must be at least 10 characters long.")
         return title
     
     def __init__(self, *args, **kwargs):
@@ -56,7 +56,7 @@ class UnauthenticatedPostCreateForm(forms.ModelForm):
     def clean_title(self):
         title = self.cleaned_data.get('title')
         if title and len(title) < 10:
-            raise forms.ValidationError("Title must be at least 50 characters long.")
+            raise forms.ValidationError("Title must be at least 10 characters long.")
         return title
 
     def __init__(self, *args, **kwargs):
