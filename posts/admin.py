@@ -36,11 +36,11 @@ class PostAdmin(admin.ModelAdmin):
     inlines = [PostLikesInline, PostCommentsInline]
     
 
-    #to show only admins and staffs in post author field.
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "author":
-            kwargs["queryset"] = Account.objects.filter(is_staff=True)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    # #to show only admins and staffs in post author field.
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     if db_field.name == "author":
+    #         kwargs["queryset"] = Account.objects.filter(is_staff=True)
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
     
     #search by
     def get_search_results(self, request, queryset, search_term):

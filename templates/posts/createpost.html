@@ -4,11 +4,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create a New Post</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'posts/css/createpost.css' %}" />
+    <title>Create a New Post</title>
 </head>
 <body>
     <div class="container">
+
+        <a href="javascript:history.back()" class="go-back-link">
+            <i class="fa-solid fa-arrow-left"></i>  Cancel And Go Back
+        </a>
+
         <h2>Create a New Post</h2>
         <form method="post" enctype="multipart/form-data">
             {{ form.media }} {% csrf_token %}
@@ -74,13 +80,21 @@
             {% endif %}
 
             <!-- Submit Button -->
-            <button type="submit" class="btn-primary">Create</button>
+            <button type="submit" class="btn-primary">Create</button> 
         </form>
     </div>
-    {% comment %} <script>
-        CKEDITOR.replace('{{ form.content.id_for_label }}', {
-            customConfig: '{% static "posts/js/ckeditor.js" %}'
+
+    <script>
+        CKEDITOR.on('instanceReady', function(event) {
+            var editor = event.editor;
+            console.log("ckedior");
+            editor.on('contentDom', function() {
+                var editable = editor.document.getBody();
+                editable.$.style.caretColor = 'red';  // Change caret color
+                editable.$.style.fontSize = '18px';  // Change font size (affects caret size)
+            });
         });
-    </script> {% endcomment %}
+    </script>
+
 </body>
 </html>

@@ -2,21 +2,32 @@
 #Form
 
 from django import forms
-from .models import Post
+from .models import Category, Language, Post
 from ckeditor.widgets import CKEditorWidget
 
 
 class AuthenticatedPostCreateForm(forms.ModelForm):
-    content = forms.CharField(widget = CKEditorWidget())
+    content = forms.CharField(widget = CKEditorWidget(config_name='minimal'))
     class Meta:
         model = Post
         fields = ['title','category','language','content','thumbnail'] 
         
     def clean_title(self):
         title = self.cleaned_data.get('title')
-        if title and len(title) < 50:
+        if title and len(title) < 10:
             raise forms.ValidationError("Title must be at least 50 characters long.")
         return title
+    
+    def __init__(self, *args, **kwargs):
+        super(AuthenticatedPostCreateForm, self).__init__(*args, **kwargs)
+        if Category.objects.exists():
+            self.fields['category'].initial = Category.objects.first()
+        self.fields['category'].empty_label = None 
+        if Language.objects.exists():
+            self.fields['language'].initial = Language.objects.first()
+        self.fields['language'].empty_label = None 
+
+
 
 
 
@@ -24,7 +35,7 @@ class AuthenticatedPostCreateForm(forms.ModelForm):
 class UnauthenticatedPostCreateForm(forms.ModelForm):
     name = forms.CharField(required=True, max_length=100)
     email = forms.EmailField(required=True)
-    content = forms.CharField(widget = CKEditorWidget())
+    content = forms.CharField(widget = CKEditorWidget(config_name='minimal'))
     class Meta:
         model = Post
         fields = ['title','category','language','content','thumbnail','name','email'] 
@@ -44,10 +55,18 @@ class UnauthenticatedPostCreateForm(forms.ModelForm):
     
     def clean_title(self):
         title = self.cleaned_data.get('title')
-        if title and len(title) < 50:
+        if title and len(title) < 10:
             raise forms.ValidationError("Title must be at least 50 characters long.")
         return title
 
+    def __init__(self, *args, **kwargs):
+        super(UnauthenticatedPostCreateForm, self).__init__(*args, **kwargs)
+        if Category.objects.exists():
+            self.fields['category'].initial = Category.objects.first()
+        self.fields['category'].empty_label = None 
+        if Language.objects.exists():
+            self.fields['language'].initial = Language.objects.first()
+        self.fields['language'].empty_label = None 
 
 
 

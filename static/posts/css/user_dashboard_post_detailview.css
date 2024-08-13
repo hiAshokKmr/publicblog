@@ -165,3 +165,31 @@
       padding: 10px;
     }
   }
+
+  .go-back-link {
+    display: flex;
+    font-size: 16px;
+    font-weight: 500;
+    align-items: center;
+    text-decoration: none;
+    color: rgb(243, 241, 241); 
+    background-color: rgb(255, 158, 14); 
+    border:1px solid rgb(243, 241, 241); 
+    padding: 10px 15px; 
+    border-radius: 8px; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+.go-back-link i {
+    margin-right: 5px; 
+    font-size: 20px; 
+}
+
+.go-back-link:hover,
+.go-back-link:focus {
+    text-decoration: none;
+    color: rgb(243, 241, 241); 
+    background-color: rgba(255, 158, 14,0.8); 
+    border:1px solid rgb(8,8,8); 
+    outline: none; 
+}

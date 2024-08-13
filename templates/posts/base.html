@@ -85,7 +85,11 @@
                     {% if request.user.is_authenticated %}
                     <div class="sidebar-menu-item"><a href="{% url 'blogpost:user-dashboard' %}"><i class="fas fa-rectangle-list"></i>Dashboard</a></div>
                     {% endif %}
-                    <div class="sidebar-menu-item"><a href=""><i class="fas fa-circle-info"></i>About</a></div>
+                    {% if not request.user.is_authenticated %}
+                    <div class="sidebar-menu-item"><a href="{%url 'account_app:register'%}"><i class="fas fa-circle-info"></i>Register</a></div>
+                    <div class="sidebar-menu-item"><a href="{%url 'account_app:login'%}"><i class="fas fa-circle-info"></i>Login</a></div>
+                    {% endif %}
+                 
                     {% if request.user.is_authenticated %}
                     <div  class="sidebar-menu-item" id="mobile-logout-button"><a   href=""><i class="fas fa-sign-in-alt"></i>Logout</a></div>
                     {% endif %}
@@ -98,7 +102,9 @@
 
                 <!-- desktop START -->
             <ul>
-                <li><img src="{% static 'posts/images/website_logo.png' %}" alt="Logo" height="100%" width="180px"></li>
+                              <li><img src="{% static 'posts/images/website_logo.png' %}" alt="Logo" class="website-logo"></li> 
+                {% comment %} <li><img src="{% static 'posts/images/website_logo.png' %}" alt="Logo" height="100%" width="180px"></li> {% endcomment %}
+                {% comment %} <li class><h1 class=" website-title">We Love Bristol</h1></li> {% endcomment %}
                 <li class="hideOnMobile desktop-dropdown">
                     {% if languages %}
                     <a id="desktop-language" href="#" onclick="toggleDropdown(event, 'language-dropdown')">Language<i class="fas fa-chevron-down"></i></a>
@@ -123,11 +129,14 @@
                 <li class="hideOnMobile"><a href="{% url 'blogpost:post-create' %}" class="" ><i class="fa-solid fa-pen-to-square create-post-icon"></i>Write Post</a></li>
                 {% if request.user.is_authenticated %}
                 <li class="hideOnMobile"><a href="{% url 'blogpost:user-dashboard' %}" class="" ><i class="fas fa-rectangle-list"></i>Dashboard</a></li>
-                {% endif %}
-                <li class="hideOnMobile"><a href="#"><i class="fas fa-circle-info"></i>About</a></li>
-                {% if request.user.is_authenticated %}
                 <li id="desktop-logout-button" class="hideOnMobile"><a href="#"><i class="fas fa-sign-in-alt "></i>Logout</a></li>
                 {% endif %}
+              
+                {% if not request.user.is_authenticated %}
+                <li class="hideOnMobile"><a href="{% url 'account_app:login'%}"><i class="fas fa-circle-info"></i>Login</a></li>
+                <li class="hideOnMobile"><a href="{% url 'account_app:register'%}"><i class="fas fa-circle-info"></i>Register</a></li>
+                {% endif %}
+                <!-- Menu Button Icon-->
                 <li class="menu-button" onclick="showSideBar()"><a href="#"><i class="fas fa-bars"></i></a></li>
             </ul>
             <!-- desktop END -->
@@ -139,6 +148,9 @@
     <div class="content-container">
 
 
+
+
+        
 
         <!-- Main content goes here -->
 {% block forcontent %}
@@ -158,13 +170,13 @@
 
 
     <!-- Create post Floating Action Button -->
-    <div class="create-post-container">
+    {% comment %} <div class="create-post-container">
         <a href="{% url 'blogpost:post-create' %}" class="create-post-link">
         <button class="create-post-button">
-            <span class="create-post-text">Create Post</span>
+            <span class="create-post-text">Write Post</span>
             <i class="fa-solid fa-pen-to-square create-post-icon"></i>
         </button>
-    </div>
+    </div> {% endcomment %}
 
     <!-- Create post Floating Action Button end -->
 

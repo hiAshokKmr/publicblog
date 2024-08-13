@@ -18,6 +18,11 @@
 
 {% block forcontent %}
 
+    <div id="cl-message-container">
+        <span id="cl-message-text"></span>
+        <span id="cl-message-close"></span>
+    </div>
+
     <!-- Post Detail Wrapper Start -->
     <div class="post-detail-wrapper">
         <div class="post-detail-main-content">
@@ -41,23 +46,26 @@
                     </a>
                 </div>
             </div>
+
             <div class="post-detail-content">
                 {{ post.content|safe }}
                 <img class="thumbnail-image" src="{{ share_post_thumbnail }}" alt="thumbnail">
             </div>
         </div>
+
         <div class="post-detail-comment-section" data-authenticated="{{ check_user }}">
             <div class="comments-container">
                 <div class="comment-vote-container">
                     <div class="comment-vote-item">
                         <img src="{% static 'posts/images/comment.png' %}" alt="Comment icon">
-                        <span>{{ post.comments_count }} Comments</span>
+                        <span>{{ post.comments_count }} comments</span>
                     </div>
-                    {% comment %} <div class="comment-vote-item">
-                        <img src="{% static 'posts/images/vote_black.png' %}" alt="Vote icon">
-                        <span>{{ post.likes_count }} Votes</span>
-                    </div> {% endcomment %}
+                   <div class="comment-vote-item">
+                        <img  id="post-vote-btn" src=" {% if user_liked %} {% static 'posts/images/vote_yellow.png' %} {% else %} {% static 'posts/images/vote_black.png' %} {% endif %}" alt="vote icon">
+                        <span id="post-vote-count">{{ post.likes_count }} votes</span>
+                    </div>
                 </div>
+
                 {% for comment in post.postcomments_set.all %}
                 <div class="comment">
                     {% if comment.user %}
@@ -173,21 +181,59 @@
 
 <script >
 
-    document.addEventListener('DOMContentLoaded', function () {
+
+    
+ document.addEventListener('DOMContentLoaded', function () {
+
+
+
+    document.querySelectorAll('iframe').forEach(function(iframe) {
+        // Set the allow attributes with permissions needed for fullscreen and other features
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+        
+        // Ensure fullscreen mode is enabled across various browser prefixes
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('mozallowfullscreen', 'true');
+        iframe.setAttribute('msallowfullscreen', 'true');
+        iframe.setAttribute('oallowfullscreen', 'true');
+        iframe.setAttribute('webkitallowfullscreen', 'true');
+    
+        // Optionally, add or update additional attributes like frameborder, height, width
+        iframe.setAttribute('frameborder', '0'); // For compatibility
+        iframe.setAttribute('height', '360'); // Example height
+        iframe.setAttribute('width', '640'); // Example width
+        
+        console.log("Updated iframe attributes.");
+    });
+    
+
+        //show message
+        function showMessage(message) {
+            var messageText = document.getElementById('cl-message-text');
+            var messageContainer = document.getElementById('cl-message-container');
+            
+            messageText.textContent = message;
+            messageContainer.classList.add('show');
+            
+            setTimeout(function () {
+                messageContainer.classList.remove('show');
+            }, 3000);
+        }
+
+
+        //Add Comment Script Start 
 
         var postDetailCommentSection =document.querySelector(".post-detail-comment-section");
         var isAuthenticatedUser=postDetailCommentSection.getAttribute("data-authenticated");
         var nameInput = document.getElementById('name-input');
         var emailInput = document.getElementById('email-input');
         if(isAuthenticatedUser=="True"){
-            console.log("user is authenticated",isAuthenticatedUser);
+            //console.log("user is authenticated",isAuthenticatedUser);
             nameInput.removeAttribute('required');
             emailInput.removeAttribute('required');
             nameInput.style.display = 'none';
             emailInput.style.display = 'none';
         }
-
-    });
 
     const commentInput = document.getElementById('comment-input');
     const submitButton = document.getElementById('submit-button');
@@ -201,73 +247,128 @@
     });
 
 
-
     document.getElementById('comment-form').addEventListener('submit', function(e) {
-        e.preventDefault();
+            e.preventDefault();
 
-        const nameInput = document.getElementById('name-input').value;
-        const username="{{request.user.username}}"
-        const emailInput = document.getElementById('email-input').value;
-        const commentInputText = document.getElementById('comment-input').value;
+            const nameInput = document.getElementById('name-input').value;
+            const username="{{request.user.username}}"
+            const emailInput = document.getElementById('email-input').value;
+            const commentInputText = document.getElementById('comment-input').value;
 
-        if (commentInputText.trim() !== '') {
-            const newComment = document.createElement('div');
-            newComment.classList.add('comment');
-            if(nameInput.trim()===""){
-                newComment.innerHTML =`<span>{{request.user.username}} : <span class="bending-text">[bending]</span></span><span class="comment-date">just now</span><p>${commentInputText}</p>`;
-            }else{
-                newComment.innerHTML =`<span>${nameInput}: <span class="bending-text">[bending]</span></span><span class="comment-date">just now</span><p>${commentInputText}</p>`;              
+            if (commentInputText.trim() !== '') {
+                const newComment = document.createElement('div');
+                newComment.classList.add('comment');
+                if(nameInput.trim()===""){
+                    newComment.innerHTML =`<span>{{request.user.username}} : <span class="Pending-text">[Pending]</span></span><span class="comment-date">just now</span><p>${commentInputText}</p>`;
+                }else{
+                    newComment.innerHTML =`<span>${nameInput}: <span class="Pending-text">[Pending]</span></span><span class="comment-date">just now</span><p>${commentInputText}</p>`;              
+                }
+            
+
+                document.querySelector('.comments-container').appendChild(newComment);
+
+                document.getElementById('name-input').value = '';
+                document.getElementById('email-input').value = '';
+                document.getElementById('comment-input').value = '';
+
+                submitButton.style.visibility = 'hidden'; 
             }
+
+
+            fetch("{% url 'blogpost:post-detail' slug=post.slug %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    name: nameInput,
+                    email: emailInput,
+                    comment: commentInputText,
+                    slug: "{{post.slug}}",
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json(); 
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log("")
+                    showMessage("Your Comment Has been Submitted.");
+                } else {
+                    showMessage('Failed to submit comment: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('Error submitting comment: ' + error.message);
+            });
+            
+     });
+        //Add Comment Script End
+
+        
+
+        //Add Like Script Start
+        var likeImg=document.getElementById("post-vote-btn");
+        likeImg.addEventListener('click',function(){
+        //console.log("vote clicked");
+        var currentSrc=likeImg.src;
+        var voteText=document.getElementById('post-vote-count');
+
+            fetch("{% url 'blogpost:post-detail' slug=post.slug %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    "slug": "{{post.slug}}",
+                    "like": "true",
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json(); 
+            })
+            .then(data => {
+                if (data.liked !== undefined && data.likes_count !== undefined) {
+                    if (data.liked) {
+                        likeImg.src="{% static 'posts/images/vote_yellow.png' %}";          
+                        showMessage("Your Vote has been Added");
+                    } else {
+                        likeImg.src="{% static 'posts/images/vote_black.png' %}";
+                        showMessage("Your Vote has been Removed");
+                    }
+                    voteText.textContent = data.likes_count === 1 ? data.likes_count+" vote": data.likes_count+" votes";
+
+                } else {
+                    // Handle the case where the response does not contain the expected properties
+                    showMessage("unable to vote the post");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('Error submitting Vote: ' + error.message);
+            });
+
+        });
+     //Add Like Script Start
+
            
 
-            document.querySelector('.comments-container').appendChild(newComment);
-
-            document.getElementById('name-input').value = '';
-            document.getElementById('email-input').value = '';
-            document.getElementById('comment-input').value = '';
-
-            submitButton.style.visibility = 'hidden'; 
-        }
 
 
-        fetch("{% url 'blogpost:post-detail' slug=post.slug %}", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': "{{ csrf_token }}"
-            },
-            body: JSON.stringify({
-                name: nameInput,
-                email: emailInput,
-                comment: commentInputText,
-                slug: "{{post.slug}}",
-            })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); 
-        })
-        .then(data => {
-            if (data.status === 'success') {
-            } else {
-                alert('Failed to submit comment: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error submitting comment: ' + error.message);
-        });
-        
+    
+
+});
 
 
-
-
-
-
-        
-    });
 </script>
 
 {% endblock forscript%}
