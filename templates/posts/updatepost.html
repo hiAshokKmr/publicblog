@@ -9,11 +9,27 @@
     <title>Edit Post</title>
 </head>
 <body>
+
+    <a href="javascript:history.back()" class="go-back-link">
+        <i class="fa-solid fa-arrow-left"></i>  cancel and Go Back
+    </a>
+
+
+
     <div class="container">
 
-        <a href="javascript:history.back()" class="go-back-link">
-            <i class="fa-solid fa-arrow-left"></i>  Cancel And Go Back
-        </a>
+              <!-- tutorial container -->
+              <div class="text-parent-container">
+                <div class="text-container">
+                    <div id="openPopupOneBtn" class="text">How to attach Image</div>
+                </div>
+                <div class="text-container">
+                    <div  id="openPopupTwoBtn" class="text">How to attach Youtube Link</div>
+                </div>
+            </div>
+            <!-- tutorial container End -->
+
+
 
         <h2>Edit Post</h2>
         <form method="post" enctype="multipart/form-data">
@@ -83,5 +99,64 @@
             <button type="submit" class="btn-primary">Update</button>
         </form>
     </div>
+
+    
+        <!-- PopupOne Container -->
+        <div id="PopupOne" class="popup">
+            <div class="popup-content">
+                <h2>Image Upload</h2>
+    
+                <div class="popup-child-section">
+                    <h3>Drag and Drop Image:</h3>
+                    <span>Go to your Computer, Right click the Image You want to add and Drag it into the editor and Drop it</span>
+                     <!-- <img src="sample-image.png" alt="Drag and Drop Image"> -->
+                    <video src="{% static 'posts/tutorial/image_drag_drop.mp4' %}" controls></video>
+                </div>
+    
+                <div class="popup-child-section">
+                    <h3>Copy/Paste Image:</h3>
+                    <span>Go to your computer, Right click the Image You want to add then copy it with Ctrl + c and and paste it with Ctrl + v inside Editor</span>
+                      <!-- <img src="sample-image.png" alt="Drag and Drop Image"> -->
+                    <video src="{% static 'posts/tutorial/image_copy_paste.mp4' %}" controls></video>
+                </div>
+    
+                <div class="popup-child-section">
+                    <h3>Click/Upload Image:</h3>
+                    <span>Click the Image icon in the Editor, Goto Upload in Image Properties, click Browse the image, and Send it to Server, Then click ok</span>
+                     <!-- <img src="sample-image.png" alt="Drag and Drop Image"> -->
+                    <video src="{% static 'posts/tutorial/image_click_upload.mp4' %}" controls></video>
+                </div>
+
+
+    
+                <button id="closePopupOneBtn" class="close-btn">Close</button>
+            </div>
+        </div>
+        <!-- PopupOne Container End -->
+    
+
+        <!-- PopupTwo Container -->
+        <div id="PopupTwo" class="popup">
+    
+            <div class="popup-content">
+                <h2>Attach  Youtube Link</h2>
+    
+                <div class="popup-child-section">
+                    <h3>Attach Youtube Embedded Link:</h3>
+                    <video src="{% static 'posts/tutorial/youtube_embedded_upload.mp4' %}" controls></video>
+                </div>
+    
+                <div class="popup-child-section">
+                    <h3>Attach Youtube Normal Link:</h3>
+                    <video src="{% static 'posts/tutorial/youtube_normal_upload.mp4' %}" controls></video>
+                </div>
+    
+                <button id="closePopupTwoBtn" class="close-btn">close</button>
+            </div>
+        </div>
+        <!-- PopupTwo Container  End-->
+
+        <script src="{% static 'posts/js/createpost.js' %}"></script>
+
 </body>
 </html>

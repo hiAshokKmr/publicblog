@@ -8,18 +8,31 @@
     <link rel="stylesheet" type="text/css" href="{% static 'posts/css/user_dashboard.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Dashboard</title>
-    <style>
-
-
-    </style>
+    <title>Dashboard</title>
+    <style></style>
   </head>
 
   <body>
 
+
+
+
+    <div class="message-container">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="message {{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+     </div>
+  
+
+
+
     <a href="javascript:history.back()" class="go-back-link">
       <i class="fa-solid fa-arrow-left"></i>Go Back To Home
-  </a>
+    </a>
 
     <div class="dashboard-container">
           <!-- User Profile Section -->
@@ -39,6 +52,9 @@
             </div>
           </div>
 
+
+
+
           <!-- User Posts Section Start-->
           <div class="user-posts">
 
@@ -46,23 +62,26 @@
                 
                 <button class="create-post-btn"  id="create-brn-url">Write Post 
                   <i class="fa-solid fa-pen-to-square create-post-icon"></i></button>
-                <select id="post-select" onchange="filterPosts()">
-                  <option value="all">All</option>
-                  <option value="pending">Pending Posts</option>
-                  <option value="published">Published Posts</option>
+
+                <select class="post-select" id="post-select" onchange="filterPosts()">
+                  <option class="option"  value="all">All</option>
+                  <option class="option"  value="pending">Pending Posts</option>
+                  <option class="option"  value="published">Published Posts</option>
                 </select>
+
               </div>
                 <!-- Post Grid  Start -->
               <div class="posts-grid" id="posts-grid">
                 
 
                 {% if published_posts.count == 0 and bending_posts.count == 0 %}
-                <p class="no-posts">You don't have Any posts</p>
+                <p class="no-posts">You don't have any posts</p>
                 {% endif %}
 
 
 
                 <!-- Published Posts Start -->
+                 {% if published_posts %}
                 {% for post in published_posts %}
                 <div class="post-item published" data-url="{% url 'blogpost:user-dashboard-post-detail' slug=post.slug %}">
                   <div class="post-image">
@@ -73,9 +92,10 @@
                   </div>
                 </div>
                 {% endfor %}
+                {% endif %}
                 <!-- Published Posts End -->
 
-
+                {% if bending_posts %}
                 <!-- Pending Posts Start -->
                 {% for post in bending_posts %}
                 <div class="post-item pending" data-url="{% url 'blogpost:user-dashboard-post-detail' slug=post.slug %}" style="display: none">
@@ -88,6 +108,7 @@
                   </div>
                 </div>
                 {% endfor %}
+                {% endif %}
                 <!-- Pending Posts End -->
 
 
@@ -128,10 +149,13 @@
         });
 
         document.getElementById('create-brn-url').addEventListener('click', function() {
-          window.location.href ='{% url 'blogpost:post-create' %}'; 
+          window.location.href ="{% url 'blogpost:post-create' %}"; 
         });
 
+
       });
+
+
     </script>
   </body>
 </html>

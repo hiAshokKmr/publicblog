@@ -3,6 +3,7 @@
 from datetime import timezone
 import json
 import logging
+from venv import logger
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
@@ -16,11 +17,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.middleware.csrf import get_token
 from django.utils.text import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 
 
-
-
+logger = logging.getLogger(__name__)
 
 
 
@@ -162,7 +163,7 @@ class PostDetailView(DetailView):
         return ip
     
     def get_random_posts(self):
-        random_posts=Post.objects.filter(published=True).order_by('?')[:15]
+        random_posts=Post.objects.filter(published=True).order_by('?')[:5]
         for post in random_posts:
             post.image_url = post.thumbnail.url if post.thumbnail else settings.MEDIA_URL + 'post/default/default_thumbnail.png'  
         return random_posts
@@ -344,23 +345,26 @@ class PostUpdateView(LoginRequiredMixin,UpdateView):
         form.instance.ip_address = ip_address
         post.published=False
         post.save()
-
+        messages.success(self.request, f"The post {post.title} has been successfully updated.")
         return super().form_valid(form)
+
 
 
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
-    template_name = 'posts/deletepost.html' 
-    success_url = reverse_lazy('blogpost:user-dashboard') 
+    template_name = 'posts/deletepost.html'
+    success_url = reverse_lazy('blogpost:user-dashboard')
     login_url = reverse_lazy('blogpost:post-home')
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(author=self.request.user)
+    print(" delete class")
 
     def delete(self, request, *args, **kwargs):
+        print("Inside delete method")
+        logger.info("Inside delete method")
+        messages.success(self.request, "The post has been successfully deleted.")
         return super().delete(request, *args, **kwargs)
+
+
 
 
 class UserDashBoard(LoginRequiredMixin,ListView):

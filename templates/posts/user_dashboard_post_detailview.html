@@ -13,13 +13,13 @@
     </style>
   </head>
   <body>
+
+    <a href="javascript:history.back()" class="go-back-link">
+      <i class="fa-solid fa-arrow-left"></i>Go Back to Dashboard
+  </a>
+
     <div class="post-detail-container">
       <div class="post-header">
-
-        <a href="javascript:history.back()" class="go-back-link">
-          <i class="fa-solid fa-arrow-left"></i>Go Back
-      </a>
-
         <h1 class="post-title">{{ post.title }}</h1>
         <div class="post-meta">
           <span>Category: {{ post.category }}</span>
