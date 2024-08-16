@@ -158,3 +158,194 @@ h2 {
     border:1px solid rgb(8,8,8); 
     outline: none; 
 }
+
+
+
+
+
+
+.text-parent-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+@media (max-width: 600px) {
+    .container {
+        flex-direction: column;
+    }
+}
+
+.text-container {
+    flex: 1; 
+    min-width: 200px; 
+    margin-bottom: 20px;
+    overflow: hidden; 
+    text-align: center;
+}
+
+.text {
+    font-size: 15px;
+    letter-spacing: 3px;
+    font-family: inherit;
+    text-decoration: underline;
+    color: rgb(255, 158, 14);
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 2s steps(18), cursor .4s step-end infinite alternate;
+}
+
+@keyframes cursor {
+    50% {
+        border-color: transparent;
+    }
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+
+
+
+/* Popup styles */
+.popup {
+    font-family: 'Inter', sans-serif;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: rgb(243, 241, 241);
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 70vw;
+    width: 100%;
+    max-height: 80vh;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: auto;
+    margin-bottom: 20px;
+    justify-content: space-evenly;
+}
+
+.popup-content h2 {
+    text-align: center;
+    font-weight: 600;
+    color: rgb(255, 158, 14);
+}
+
+.popup-content h3 {
+    text-align: left;
+    font-weight: 500;
+}
+
+.popup-content span {
+    font-weight: 400;
+}
+
+.close-btn {
+    position: relative;
+    /* background:rgba(243, 241, 241,0.5); */
+    box-shadow: 1px solid rgb(255, 158, 14);
+    color: #0c0c0c;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    font-weight: 400;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 20px;
+    min-width: 80px;
+}
+
+.popup-child-section {
+    margin-bottom: 20px;
+}
+
+.popup-child-section h2, .popup-child-section h3 {
+    margin: 10px 0;
+}
+
+.popup-child-section img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.popup-child-section video {
+    width: 100%;
+    height: auto;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 2px solid rgb(8, 8, 8);
+}
+
+/* Video overlay styles */
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    border-radius: 5px;
+}
+
+/* .video-container video {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 5px;
+    border: 1px solid rgb(255, 158, 14);
+    z-index: 1;
+}
+
+.video-overlay.hidden {
+    display: none;
+}
+
+.video-overlay i {
+    font-size: 100px;
+    color: rgb(231, 231, 231);
+} */
+
+/* Responsive design for smaller screens */
+@media (max-width: 789px) {
+    .popup-content {
+        width: 90vw;
+        height: 90vh;
+    }
+}

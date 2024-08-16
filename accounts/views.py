@@ -184,6 +184,8 @@ class CheckAuthView(View):
     
 
 
+
+
 def password_reset_request(request):
     if request.method=='POST':
         print("request it post method")
@@ -222,6 +224,7 @@ def password_reset_request(request):
         'password_reset_form':password_reset_form
     }
     return render(request,'accounts/password_reset.html',context)
+
 
 
 

@@ -49,6 +49,7 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
+        'removeButtons': 'Iframe', 
         'extraPlugins':','.join([
             'html5video','youtube',
         ]),
