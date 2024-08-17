@@ -141,6 +141,16 @@ img:hover {
   overflow: hidden;
 }
 
+.post-date{
+  position: absolute;
+  background-color: rgba(172, 171, 171, 0.8);
+  top: 0;
+  left: 0;
+  margin: 5px;
+  padding: 4px;
+  border-radius: 5px;
+}
+
 .post-item:hover,
 .post-item:focus {
   cursor: pointer;

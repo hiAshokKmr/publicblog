@@ -70,6 +70,8 @@
                 </select>
 
               </div>
+
+
                 <!-- Post Grid  Start -->
               <div class="posts-grid" id="posts-grid">
                 
@@ -84,6 +86,7 @@
                  {% if published_posts %}
                 {% for post in published_posts %}
                 <div class="post-item published" data-url="{% url 'blogpost:user-dashboard-post-detail' slug=post.slug %}">
+                  <div class="post-date">{{post.get_display_date|date:"d" }}{{post.get_display_date|date:"M Y" }}</div>
                   <div class="post-image">
                     <img src="{{post.thumbnail.url}}" alt="Image" />
                   </div>
@@ -99,6 +102,7 @@
                 <!-- Pending Posts Start -->
                 {% for post in bending_posts %}
                 <div class="post-item pending" data-url="{% url 'blogpost:user-dashboard-post-detail' slug=post.slug %}" style="display: none">
+                  <div class="post-date">{{post.get_display_date|date:"d" }}{{post.get_display_date|date:"M Y" }}</div>
                   <div class="pending-label">Pending</div>
                   <div class="post-image">
                     <img src="{{post.thumbnail.url}}" alt="Image" />
@@ -113,7 +117,8 @@
 
 
               </div>
-              <!-- User Post End -->
+              <!--  Post Grid End -->
+
           </div>
             <!-- User Posts Section End -->
 
