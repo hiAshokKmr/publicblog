@@ -21,6 +21,12 @@
     {% block forstyle %}
     {%endblock forstyle %}
 
+    <style>
+
+
+        
+    </style>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
@@ -49,7 +55,7 @@
                     <div class="sidebar-menu-item" id="mobile-selected-language"><a ><i class="fas fa-language"></i><span >Tamil</span>
 
                         <!-- language drop down arrow -->
-                        <i class="fas fa-chevron-down mobile-dropdown"></i>
+                        <i class="fas fa-chevron-down mobile-dropdown" class="right-i"></i>
                     </a>
                     <!-- language drop down -->
                     <div class="sidebar-submenu"  id="sidebar-submenu-language">
@@ -65,9 +71,9 @@
 
 
                 <!-- category START -->
-                    <div class="sidebar-menu-item" id="mobile-selected-category"><a ><i class="fas fa-list"></i><span>Home</span>
+                    <div class="sidebar-menu-item" id="mobile-selected-category"><a><i class="fas fa-list"></i><span>Home</span>
                         <!-- category drop down arrow -->
-                        <i class="fas fa-chevron-down mobile-dropdown"></i>
+                        <i class="fas fa-chevron-down mobile-dropdown" class="right-i"></i>
                         </a>
                         <!-- category drop down -->
                         <div class="sidebar-submenu" id="sidebar-submenu-category">
@@ -102,9 +108,11 @@
 
                 <!-- desktop START -->
             <ul>
-                              <li><img src="{% static 'posts/images/website_logo.png' %}" alt="Logo" class="website-logo"></li> 
+                <li><img src="{% static 'posts/images/website_logo.png' %}" alt="Logo" class="website-logo"></li> 
                 {% comment %} <li><img src="{% static 'posts/images/website_logo.png' %}" alt="Logo" height="100%" width="180px"></li> {% endcomment %}
                 {% comment %} <li class><h1 class=" website-title">We Love Bristol</h1></li> {% endcomment %}
+                <li><a href="#" onclick="toggleSearch()" ><i class="fa-solid fa-magnifying-glass"></i></a></li>
+
                 <li class="hideOnMobile desktop-dropdown">
                     {% if languages %}
                     <a id="desktop-language" href="#" onclick="toggleDropdown(event, 'language-dropdown')">Language<i class="fas fa-chevron-down"></i></a>
@@ -140,6 +148,15 @@
                 <li class="menu-button" onclick="showSideBar()"><a href="#"><i class="fas fa-bars"></i></a></li>
             </ul>
             <!-- desktop END -->
+
+
+            <div class="blog-search">
+                <div class="search-input-container">
+                    <input type="text" class="search-input" placeholder="Search...">
+                    <button>search</buton>
+                </div>
+            </div>
+
         </nav>
         <!-- HEADER END -->
         
@@ -147,10 +164,6 @@
 
     <div class="content-container">
 
-
-
-
-        
 
         <!-- Main content goes here -->
 {% block forcontent %}
@@ -170,13 +183,14 @@
 
 
     <!-- Create post Floating Action Button -->
-    {% comment %} <div class="create-post-container">
-        <a href="{% url 'blogpost:post-create' %}" class="create-post-link">
-        <button class="create-post-button">
+
+    <div class="create-post-container">
+        <button class="create-post-button" id="create-post-button">
             <span class="create-post-text">Write Post</span>
             <i class="fa-solid fa-pen-to-square create-post-icon"></i>
         </button>
-    </div> {% endcomment %}
+    </div>
+    
 
     <!-- Create post Floating Action Button end -->
 
@@ -185,12 +199,10 @@
 
          <!-- FOOTER START -->
             <footer>
-
-                
                 <div class="footer-container">
                     <div class="footer-row">
                             <div class="footer-col">
-                                <h4>about us</h4>
+                                <h4>about</h4>
                                 <ul>
                                     <li><a href="#">Our Service</a></li>
                                     <li><a href="#">Privacy Policy</a></li>
@@ -199,7 +211,7 @@
                                 </ul>
                             </div>
                             <div class="footer-col">
-                                <h4>follow us</h4>
+                                <h4>follow</h4>
                                 <div class="social-links">
                                     <a href="#"><i class="fa-brands fa-square-facebook"  style="color: darkblue;"></i></a>
                                     <a href="#"><i class="fa-brands fa-square-instagram" style="color: coral;"></i></a>
@@ -208,7 +220,7 @@
                                 </div>
                             </div>
                             <div class="footer-col">
-                                <h4>contact us</h4>
+                                <h4>contact</h4>
                                 <ul>
                                     <li><a href="#">Support Email</a></li>
                                     <li><a href="#">General Email</a></li>
@@ -255,7 +267,12 @@
 
 <script>
 
+    const createPostButton = document.getElementById('create-post-button');
+    const createPostUrl = "{% url 'blogpost:post-create' %}"; // Pass your URL here
 
+    createPostButton.addEventListener('click', () => {
+        window.location.href = createPostUrl; // Redirect to the URL
+    });
 
     function getCsrfToken() {
         var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -328,6 +345,11 @@
 
 
 
+
+        function toggleSearch() {
+            const blogSearch = document.querySelector('.blog-search');
+            blogSearch.classList.toggle('active');
+        }
 
 
 

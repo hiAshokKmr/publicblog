@@ -163,7 +163,7 @@ class PostDetailView(DetailView):
         return ip
     
     def get_random_posts(self):
-        random_posts=Post.objects.filter(published=True).order_by('?')[:5]
+        random_posts=Post.objects.filter(published=True).order_by('?')[:10]
         for post in random_posts:
             post.image_url = post.thumbnail.url if post.thumbnail else settings.MEDIA_URL + 'post/default/default_thumbnail.png'  
         return random_posts
