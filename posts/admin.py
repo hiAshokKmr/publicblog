@@ -75,4 +75,4 @@ class PostCommentsAdmin(admin.ModelAdmin):
 admin.site.register(PostComments, PostCommentsAdmin)
 
 
-
+admin.site.register(DeviceToken)

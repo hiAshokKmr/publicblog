@@ -16,6 +16,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <script type="module" src="{% static 'posts/js/firebase_messaging.js' %}"></script>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/static/posts/js/firebase_messaging_sw.js', { scope: '/' })
+          .then((registration) => {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch((error) => {
+            console.error('Service Worker registration failed:', error);
+          });
+    }
+</script>
+
+    
 
 
     {% block forstyle %}
@@ -150,12 +168,23 @@
             <!-- desktop END -->
 
 
-            <div class="blog-search">
+            {% comment %} <div class="blog-search">
                 <div class="search-input-container">
                     <input type="text" class="search-input" placeholder="Search...">
                     <button>search</buton>
                 </div>
+            </div> {% endcomment %}
+
+            <div class="blog-search">
+                <div class="search-input-container">
+                    <form id="search-form" method="GET" action="{% url 'blogpost:post-home' %}">
+                        <input type="text" class="search-input" name="q" placeholder="Search...">
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
             </div>
+            
+
 
         </nav>
         <!-- HEADER END -->
@@ -184,9 +213,18 @@
 
     <!-- Create post Floating Action Button -->
 
-    <div class="create-post-container">
+    <div class="floating-container">
+
+        <div class="floating-icon-button" id="">
+            <i class="fa-solid fa-bell"></i>
+        </div>
+
+        {% comment %} <div class="floating-icon-button" id="">
+            <i class="fa-solid fa-sun fa-bounce"></i>
+        </div> {% endcomment %}
+        
         <button class="create-post-button" id="create-post-button">
-            <span class="create-post-text">Write Post</span>
+            <span>Write Post</span>
             <i class="fa-solid fa-pen-to-square create-post-icon"></i>
         </button>
     </div>
@@ -291,65 +329,31 @@
     }
 
 
-    // // Select Language Code Mobile
-    // // Get the initial selected language from the mobile-selected-language element
-    // let mobileSelectedLanguage = document.querySelector("#mobile-selected-language span").textContent;
-    
-    // document.getElementById("mobile-selected-language").addEventListener("click", function() {
-    //     var submenu = document.getElementById("sidebar-submenu-language");
-    //     if (submenu.classList.contains("show")) {
-    //         submenu.classList.remove("show");
-    //     } else {
-    //         submenu.classList.add("show");
-    //     }
-    // });
-    
-    // var submenuItems = document.querySelectorAll(".sidebar-submenu-item");
-    // submenuItems.forEach(function(item) {
-    //     item.addEventListener("click", function(event) {
-    //         event.preventDefault(); 
-    //         mobileSelectedLanguage = this.textContent; 
-    //         var mobileSelectedLanguageSpan = document.querySelector("#mobile-selected-language span");
-    //         mobileSelectedLanguageSpan.textContent = mobileSelectedLanguage;
-    //         var submenu = document.getElementById("sidebar-submenu-language");
-    //         setTimeout(function() {
-    //             submenu.classList.remove("show");
-    //         }, 100); 
-    //         sendMobileSelectedLanguage();
-    //     });
-    // });
-    
-    // // Example fetch method to send the selected language
-    // function sendMobileSelectedLanguage() {
-    //     console.log("mobile selected language is ", mobileSelectedLanguage);
-    //     fetch('https://httpbin.org/post', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({ language: mobileSelectedLanguage }),
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         console.log('Success:', data);
-    //     })
-    //     .catch((error) => {
-    //         console.error('Error:', error);
-    //     });
-    // }
-    // // Select Language Code Mobile END
-
-
-
-    
-
-
 
 
         function toggleSearch() {
             const blogSearch = document.querySelector('.blog-search');
+            const searchInput = blogSearch.querySelector('.search-input');
+        
             blogSearch.classList.toggle('active');
+        
+            // Focus on the search input when search bar is toggled
+            if (blogSearch.classList.contains('active')) {
+                searchInput.focus();
+            }
+        
+            // Optionally, listen for Enter key press to submit the form
+            searchInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Prevent default form submission
+                    document.getElementById('search-form').submit(); // Manually submit the form
+                }
+            });
         }
+        
+
+
+
 
 
 
@@ -359,6 +363,9 @@
     </script>
     
 
+
+
+    
 
 </body>
 </html>

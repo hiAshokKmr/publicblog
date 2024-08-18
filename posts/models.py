@@ -163,6 +163,15 @@ def update_post_comments_count(sender, instance, **kwargs):
         instance.post.save(update_fields=['comments_count'])
 
 
+# models.py
+from django.db import models
+
+class DeviceToken(models.Model):
+    token = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.token
 
 
 
