@@ -13,6 +13,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-&3-yj5u)v^2g$*edql&94g_08%y$6nx9ln8(%a_+oy$2g_y0h^'
 
+# settings.py
+
+FIREBASE_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'secure_files', 'publicblog-e1866-firebase-adminsdk-lzkry-32859724d9.json')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

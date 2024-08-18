@@ -400,3 +400,16 @@ class UserDashboardPostDetailView(LoginRequiredMixin,DetailView):
 
 
 
+
+
+from .models import DeviceToken
+
+class RegisterDeviceView(View):
+    def post(self, request, *args, **kwargs):
+        print("hey POST method triggered")
+        token = request.POST.get('token')
+        if token:
+            DeviceToken.objects.get_or_create(token=token)
+            print("hey POST method triggered and token is generated")
+            return JsonResponse({'status': 'success'})
+        return JsonResponse({'status': 'failed'})

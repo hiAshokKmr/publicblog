@@ -12,6 +12,7 @@ urlpatterns=[
     path("writepost",PostCreateView.as_view(),name="post-create"),   
     path("",PostListView.as_view(),name="post-home"),
     path("<slug>/",PostDetailView.as_view(),name="post-detail"),   
+    path('register-device/', RegisterDeviceView.as_view(), name='register-device'),
 ]
 
 
