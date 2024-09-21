@@ -26,6 +26,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from ckeditor_uploader import views as ckeditor_views
 from django.urls import re_path
+from django.views.static import serve
 urlpatterns = [
     path('admin/', admin.site.urls),
     # Account URLs
@@ -44,7 +45,7 @@ urlpatterns = [
 path('ckeditor/upload/',ckeditor_views.upload, name='ckeditor_upload'),
 path('ckeditor/browse/', never_cache(ckeditor_views.browse), name='ckeditor_browse'),  
 
-
+path('firebase_messaging_sw.js', serve, {'path': 'firebase_messaging_sw.js', 'document_root': settings.BASE_DIR}),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
