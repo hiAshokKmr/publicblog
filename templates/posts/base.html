@@ -19,19 +19,56 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 
-    <script type="module" src="{% static 'posts/js/firebase_messaging.js' %}"></script>
+
+    
+    <!-- FIREBASE CODE START -->
+    
+    
+
+
+
+<script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+<script type="module" src="{% static 'posts/js/firebase_messaging.js' %}"></script>
+
 
 <script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/static/posts/js/firebase_messaging_sw.js', { scope: '/' })
-          .then((registration) => {
-            console.log('Service Worker registered with scope:', registration.scope);
-          })
-          .catch((error) => {
-            console.error('Service Worker registration failed:', error);
-          });
-    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("Service Worker URL:", "/firebase_messaging_sw.js");
+      
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/firebase_messaging_sw.js', { scope: '/' })
+            .then((registration) => {
+              console.log('Service Worker registered with scope:', registration.scope);
+
+              document.getElementById('notification-permission-button').addEventListener('click', () => {
+                if (window.handleNotification) {
+                  window.handleNotification();
+                } else {
+                  console.error('handleNotification function is not defined');
+                }
+              });
+
+            })
+            .catch((error) => {
+              console.error('Service Worker registration failed:', error);
+            });
+        } else {
+          console.error('Service workers are not supported in this browser.');
+        }
+      
+
+
+      });
+      
+
 </script>
+
+
+
+    <!-- FIREBASE CODE END -->
+
 
     
 
@@ -49,6 +86,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
+
+
+    {% comment %} <div id="preloader">
+        <img class="preloader-img" src="{% static 'posts/images/welovebristol.gif' %}"></img>
+    </div> {% endcomment %}
 
     <div class="page-wrapper">
 
@@ -193,17 +235,10 @@
 
     <div class="content-container">
 
-
         <!-- Main content goes here -->
-{% block forcontent %}
+            {% block forcontent %}
 
-
-        
-
-
- {% endblock forcontent %} 
-
-
+            {% endblock forcontent %} 
             
     </div>
 
@@ -215,7 +250,7 @@
 
     <div class="floating-container">
 
-        <div class="floating-icon-button" id="">
+        <div class="floating-icon-button" id="notification-permission-button">
             <i class="fa-solid fa-bell"></i>
         </div>
 
@@ -274,7 +309,11 @@
                 <!-- FOOTER END -->
     </div>
     <!-- Page Wrapper END -->
+
+
 </body>
+
+
 
 
 

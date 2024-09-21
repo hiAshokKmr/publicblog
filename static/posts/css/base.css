@@ -5,6 +5,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&family=Russo+One&family=Zilla+Slab+Highlight:wght@400;700&display=swap');
 
 
+
+#preloader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background-color: rgba(243, 241, 241,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preloader-img{
+    border-radius: 15px;
+    width:30vw;
+    opacity: 0.5;
+}
+
  .blog-search {
     display: none;
     width: 100%;
