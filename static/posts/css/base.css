@@ -168,20 +168,22 @@ background-color: rgb(243, 241, 241);
     display: flex;
     flex-direction: column;
     min-height: 100vh;  
-
+    width: 100%;
 }
 
 
 .content-container {
-    flex: 1;
+    margin: 80px auto 30px;
+    /* flex: 1; */
     padding: 10px; 
-    margin: 80px 10px 20px;
+    /* margin: 80px 10px 20px; */
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 20px;
-    max-width: 1200px;
+    max-width:2000px;
     box-sizing: border-box;
     position: relative; 
+
 }
 
 nav{
@@ -381,7 +383,7 @@ overflow-y: auto;
     margin: 15px;
     border-radius: 50%; 
     border: 3px solid #d4d3d3;
-    object-fit: cover; 
+    object-fit: contain; 
 }
 
 .sidebar-menu{
@@ -568,6 +570,7 @@ ul {
     box-sizing: border-box;
     text-decoration: none;
     width: 100px;
+    padding-right: 10px;
 }
 
 .footer-col ul li:not(:last-child){
@@ -702,21 +705,28 @@ justify-content: center;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     width: 100%;
+    height: 600px; 
+    margin-bottom: 30px;
+    /* background-color: rgb(255, 158, 14); */
+    
 }
 
+
+
 .post-one {
-    background-color: rgb(235, 234, 234);
+    /* background-color: rgb(235, 234, 234); */
+    /* background-color: rgb(255, 158, 14); */
     border: 0.5px solid rgba(15, 15, 15, 0.1);
     padding: 0;
     border-radius: 10px;
     overflow: hidden;
-    height: 250px; 
+    height: 200px; 
     width:100%; 
     box-sizing: border-box;
     position: relative;
     display: flex;
+    justify-content: space-between;
     flex-direction: column;
-    
 }
 
 .post-one-header {
@@ -744,16 +754,15 @@ justify-content: center;
     width: 100%;
     border-radius: 0 0 10px 10px;
     height: 100%; 
-    object-fit: cover;
+    object-fit: fill;
 }
 
 .post-one-content {
-  background-color: transparent;
     margin: 5px;
     display: flex;
     justify-content: space-evenly;
     align-items:baseline;
-    height: 40%;  
+    /* height:30px;   */
     margin-bottom: 10px;
     border-radius: 0 0 10px 10px;
     box-sizing: border-box;
@@ -766,8 +775,10 @@ justify-content: center;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp:4; 
+    line-clamp: 4;    
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
+    align-items: center;
 }
 
 .post-one-title:hover,
@@ -790,7 +801,7 @@ justify-content: center;
     gap: 5px;
     padding:0px;
     width:400px;
-    /* min-height: 100vh; */
+    min-height: 100%;
     height:100vh;
     box-sizing: border-box;
     overflow-y: auto;
@@ -811,7 +822,7 @@ justify-content: center;
     width: 40%;
     height: 100%; 
     border-radius: 10px;
-    object-fit: cover;
+    object-fit: fill;
     flex-shrink: 0;
 }
 
@@ -832,6 +843,7 @@ justify-content: center;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp:3;
+    line-clamp: 4;    
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
     word-wrap: break-word;
@@ -875,7 +887,8 @@ justify-content: center;
 
 
 .scrollable-container {
-    background-color: #000;
+    /* background-color: #000; */
+    max-height: 300px;
     display: flex;
     background-color: transparent;
     overflow-x: auto;
@@ -898,7 +911,7 @@ justify-content: center;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* Change justify-content to flex-end */
+    /* justify-content: flex-end;  */
     position: relative;
 }
 
@@ -927,13 +940,14 @@ justify-content: center;
 }
 
 .scrollable-post-content {
-    flex: 1;
+    /* flex: 1; */
     padding:0;
     margin-bottom:10px ;
     display: flex;
     align-content: center;
     flex-direction: column;
-    justify-content:flex-start;
+    /* justify-content:flex-start; */
+    justify-content: space-around;
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
@@ -947,6 +961,7 @@ justify-content: center;
     padding-left: 10px;
     display: -webkit-box;
     -webkit-line-clamp: 4; 
+    line-clamp: 4;    
     -webkit-box-orient: vertical; 
     overflow: hidden; 
     text-overflow: ellipsis; 
@@ -965,7 +980,6 @@ justify-content: center;
     right: 5px;
     font-size: 20px;
     color: #000;
-    background-color: rgba(255, 255, 255, 0.7); 
     padding: 3px;
     border-radius: 50%; 
     z-index: 2; 
@@ -1465,7 +1479,7 @@ justify-content: center;
 
 /* base html view create post section  */
 
-.floating-container {
+/* .floating-container {
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -1474,7 +1488,19 @@ justify-content: center;
     bottom: 20px;
     right: 20px;
     z-index: 1000;
+} */
+
+.floating-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Aligns items to the end */
+    gap: 20px;
+    bottom: 20px; /* Default value that will be overridden by JavaScript */
+    right: 20px;  /* Always stay 20px from the right */
+    z-index: 100; /* High z-index to stay above other elements */
 }
+
 
 .floating-container span {
     margin-right: 8px;

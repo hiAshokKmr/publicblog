@@ -20,7 +20,7 @@ FIREBASE_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'secure_files', 'publicblog-e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['hellopublicblog.lovestoblog.com', '16.171.177.245']
 
 
 

@@ -70,15 +70,17 @@
                     </div>
             <!-- Popular Posts End -->
             
+
             
             
+            {% if more_popular_posts %}
             <!-- Scrollable Posts Start -->
             <div class="scrollable-container-wrapper">
             
                 <div class="scroll-indicator scroll-indicator-left"><i class="fa fa-arrow-left"></i></div>
                  <div class="scrollable-container">
                   
-                    {% if more_popular_posts %}
+
                     {% for morepopular in more_popular_posts %}
                         <div class="scrollable-post" data-url="{{morepopular.get_absolute_url}}">
                             <div class="scrollable-post-content">
@@ -89,14 +91,14 @@
                             </div>
                         </div>
                         {%endfor%}
-                        {%endif%}
+
             
                 </div>
                 <div class="scroll-indicator scroll-indicator-right"><i class="fa fa-arrow-right"></i> </div>
                 
            </div>
             <!-- Scrollable Post END -->
-            
+            {%endif%}
 
 
  {% endblock forcontent %}

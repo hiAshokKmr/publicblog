@@ -61,6 +61,7 @@ body {
 }
 
 .container {
+    max-width: 2000px;
     width: 40vw;
     /* background-color: #d4d3d3; */
     background-color: rgb(255, 158, 14);

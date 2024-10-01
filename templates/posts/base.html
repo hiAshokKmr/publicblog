@@ -26,44 +26,30 @@
     
 
 
+    <script type="module" src="{% static 'posts/js/firebase-messaging.js' %}"></script>
 
-<script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
-<script type="module" src="{% static 'posts/js/firebase_messaging.js' %}"></script>
+    <script type="module">
 
 
-<script>
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log("Service Worker URL:", "/firebase_messaging_sw.js");
-      
         if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('/firebase_messaging_sw.js', { scope: '/' })
-            .then((registration) => {
-              console.log('Service Worker registered with scope:', registration.scope);
-
-              document.getElementById('notification-permission-button').addEventListener('click', () => {
-                if (window.handleNotification) {
-                  window.handleNotification();
-                } else {
-                  console.error('handleNotification function is not defined');
-                }
+            // Register the service worker if supported
+            navigator.serviceWorker.register('/firebase-messaging-sw.js')
+              .then(function(registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+              }).catch(function(err) {
+                console.error('Service Worker registration failed:', err);
               });
-
-            })
-            .catch((error) => {
-              console.error('Service Worker registration failed:', error);
-            });
-        } else {
-          console.error('Service workers are not supported in this browser.');
-        }
-      
+          } else {
+            console.log('Service Workers are not supported in this browser.');
+          }
+          
 
 
-      });
-      
-
-</script>
+      // Call this function to request notification permission
+      function enableNotifications() {
+        requestNotificationPermission();
+      }
+    </script>
 
 
 
@@ -258,7 +244,7 @@
             <i class="fa-solid fa-sun fa-bounce"></i>
         </div> {% endcomment %}
         
-        <button class="create-post-button" id="create-post-button">
+        <button class="create-post-button" id="create-post-button" onclick="enableNotifications()">
             <span>Write Post</span>
             <i class="fa-solid fa-pen-to-square create-post-icon"></i>
         </button>
@@ -307,6 +293,8 @@
                 </div> 
             </footer>
                 <!-- FOOTER END -->
+
+
     </div>
     <!-- Page Wrapper END -->
 
@@ -334,7 +322,7 @@
 
 <!-- script area -->
 <script src="{% static 'posts/js/base.js' %}"></script>
-
+<script src="{% static 'posts/js/set_heights.js' %}"></script>
 
 
 {% block forscript %}
