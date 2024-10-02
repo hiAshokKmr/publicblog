@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'ckeditor',
     'ckeditor_uploader',
+    'whitenoise.runserver_nostatic',
 ]
 
 
