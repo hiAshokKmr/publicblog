@@ -20,9 +20,9 @@ FIREBASE_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'secure_files', 'publicblog-e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['hellopublicblog.lovestoblog.com', '16.171.177.245']
+ALLOWED_HOSTS = ['*', 'hellopublicblog.lovestoblog.com', '16.171.177.245']
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 
 
 
@@ -175,8 +175,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles_build','static')
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles_build','static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
